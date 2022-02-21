@@ -132,7 +132,12 @@
       </div>
     </div>
 
-    <b-modal id="modalCauHinh" title="Cấu Hình Server">
+    <b-modal
+      size="lg"
+      no-close-on-backdrop
+      id="modalCauHinh"
+      title="Cấu Hình Server"
+    >
       <b-form-row>
         <b-col cols="6">
           <b-form-group
@@ -171,7 +176,7 @@
         ></b-form-textarea>
       </b-form-group>
       <b-form-row>
-        <b-col cols="6">
+        <b-col cols="4">
           <b-form-group
             label="RSI 15M"
             description="Cấu hình lọc RSI 15M nặc định"
@@ -185,7 +190,7 @@
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col cols="6">
+        <b-col cols="4">
           <b-form-group
             label="RSI 5M"
             description="Cấu hình lọc RSI 5M mặc định"
@@ -195,6 +200,20 @@
               min="0"
               max="100"
               v-model="serverConfig.rsi5m"
+              required
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
+        <b-col cols="4">
+          <b-form-group
+            label="Clien Refresh"
+            description="Thời gian lấy dữ liệu từ phía client"
+          >
+            <b-form-input
+              type="number"
+              min="0"
+              max="100"
+              v-model="serverConfig.delayClient"
               required
             ></b-form-input>
           </b-form-group>
@@ -221,6 +240,62 @@
               v-model="serverConfig.bbperiod"
               required
             ></b-form-input>
+          </b-form-group>
+        </b-col>
+        <b-col cols="6">
+          <b-row>
+            <b-col cols="6">
+              <b-form-group
+                label="Thông Báo "
+                description="Bật thông báo qua email khi RSI 15M,RSI5M vượt ngưỡng"
+              >
+                <b-form-checkbox
+                  switch
+                  v-model="serverConfig.enaleNoti"
+                  required
+                ></b-form-checkbox>
+              </b-form-group>
+            </b-col>
+            <b-col cols="6">
+              <b-form-group
+                label="BB listwatch "
+                description="Bật BB listwatch"
+              >
+                <b-form-checkbox
+                  switch
+                  v-model="serverConfig.bblistWatch"
+                  required
+                ></b-form-checkbox>
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
+              <b-form-group label="RSI 15M Noti" description="RSI 15M cảnh báo">
+                <b-form-input
+                  type="number"
+                  v-model="serverConfig.rsi15mNoti"
+                  required
+                ></b-form-input> </b-form-group
+            ></b-col>
+            <b-col cols="12">
+              <b-form-group label="RSI 5M Noti" description="RSI 15M cảnh báo">
+                <b-form-input
+                  type="number"
+                  v-model="serverConfig.rsi5mNoti"
+                  required
+                ></b-form-input> </b-form-group
+            ></b-col>
+          </b-row>
+        </b-col>
+        <b-col cols="6">
+          <b-form-group
+            label="Email Nhận Thông Báo"
+            description="Cẩn thận gây nhức đầu,điền email ai nấy phải chịu,cách nhau bằng dấu , nếu muốn nhận nhiều"
+          >
+            <b-form-textarea
+              rows="8"
+              v-model="serverConfig.listEmail"
+              required
+            ></b-form-textarea>
           </b-form-group>
         </b-col>
       </b-form-row>
@@ -263,12 +338,159 @@ export default {
     return {
       serverConfig: {
         delayScript: 20,
+        delayClient: 5,
         period: 6,
-        pairList: [],
+        bblistWatch: true,
+        pairList: [
+          "RAYUSDT",
+          "SUSHIUSDT",
+          "CVCUSDT",
+          "BTSUSDT",
+          "HOTUSDT",
+          "ZRXUSDT",
+          "QTUMUSDT",
+          "IOTAUSDT",
+          "BTCBUSD",
+          "WAVESUSDT",
+          "ADAUSDT",
+          "LITUSDT",
+          "XTZUSDT",
+          "BNBUSDT",
+          "AKROUSDT",
+          "HNTUSDT",
+          "ETCUSDT",
+          "XMRUSDT",
+          "YFIUSDT",
+          "FTTBUSD",
+          "ETHUSDT",
+          "ALICEUSDT",
+          "ALPHAUSDT",
+          "SFPUSDT",
+          "REEFUSDT",
+          "BATUSDT",
+          "DOGEUSDT",
+          "RLCUSDT",
+          "TRXUSDT",
+          "STORJUSDT",
+          "SNXUSDT",
+          "AUDIOUSDT",
+          "XLMUSDT",
+          "IOTXUSDT",
+          "NEOUSDT",
+          "UNIUSDT",
+          "SANDUSDT",
+          "DASHUSDT",
+          "KAVAUSDT",
+          "RUNEUSDT",
+          "CTKUSDT",
+          "LINKUSDT",
+          "CELRUSDT",
+          "RSRUSDT",
+          "ADABUSD",
+          "DGBUSDT",
+          "SKLUSDT",
+          "RENUSDT",
+          "LPTUSDT",
+          "TOMOUSDT",
+          "MTLUSDT",
+          "LTCUSDT",
+          "DODOUSDT",
+          "KSMUSDT",
+          "EGLDUSDT",
+          "BNBBUSD",
+          "VETUSDT",
+          "ONTUSDT",
+          "IMXUSDT",
+          "TRBUSDT",
+          "MANAUSDT",
+          "FLOWUSDT",
+          "COTIUSDT",
+          "CHRUSDT",
+          "BAKEUSDT",
+          "GRTUSDT",
+          "FLMUSDT",
+          "MASKUSDT",
+          "EOSUSDT",
+          "OGNUSDT",
+          "SCUSDT",
+          "BALUSDT",
+          "STMXUSDT",
+          "LUNAUSDT",
+          "DENTUSDT",
+          "KNCUSDT",
+          "SRMUSDT",
+          "ENJUSDT",
+          "C98USDT",
+          "ZENUSDT",
+          "ATOMUSDT",
+          "NEARUSDT",
+          "SOLBUSD",
+          "ENSUSDT",
+          "BCHUSDT",
+          "ATAUSDT",
+          "IOSTUSDT",
+          "HBARUSDT",
+          "ZECUSDT",
+          "TLMUSDT",
+          "ANTUSDT",
+          "ETHBUSD",
+          "GALAUSDT",
+          "AAVEUSDT",
+          "GTCUSDT",
+          "ALGOUSDT",
+          "ICPUSDT",
+          "LRCUSDT",
+          "AVAXUSDT",
+          "ARPAUSDT",
+          "CELOUSDT",
+          "ROSEUSDT",
+          "MATICUSDT",
+          "1INCHUSDT",
+          "MKRUSDT",
+          "PEOPLEUSDT",
+          "THETAUSDT",
+          "UNIUSDT",
+          "LINAUSDT",
+          "ARUSDT",
+          "RVNUSDT",
+          "FILUSDT",
+          "NKNUSDT",
+          "KLAYUSDT",
+          "COMPUSDT",
+          "SOLUSDT",
+          "BTCUSDT",
+          "OMGUSDT",
+          "ICXUSDT",
+          "BLZUSDT",
+          "FTMUSDT",
+          "YFIIUSDT",
+          "BANDUSDT",
+          "XRPBUSD",
+          "DOGEBUSD",
+          "XRPUSDT",
+          "SXPUSDT",
+          "CRVUSDT",
+          "BELUSDT",
+          "DOTUSDT",
+          "XEMUSDT",
+          "ONEUSDT",
+          "ZILUSDT",
+          "AXSUSDT",
+          "DYDXUSDT",
+          "OCEANUSDT",
+          "CHZUSDT",
+          "ANKRUSDT",
+          "DUSKUSDT",
+          "CTSIUSDT",
+        ],
         rsi15m: 50,
         rsi5m: 20,
         volume: 1,
         bbperiod: 6,
+        listEmail: "trinhminhbao@gmail.com",
+        enaleNoti: false,
+        rsi15mNoti: 80,
+        rsi5mNoti: 90,
       },
       sortBy: "rsi15m.RSI",
       sortDesc: true,
