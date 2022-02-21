@@ -86,6 +86,11 @@
                       :tbody-transition-props="transProps"
                       :filter="filterName"
                     >
+                      <template #empty="">
+                        <p>
+                          Không có thông tin phù hợp với các trường lọc lúc này!
+                        </p>
+                      </template>
                       <template #cell(#)="data">
                         {{ data.index + 1 }}
                       </template>
