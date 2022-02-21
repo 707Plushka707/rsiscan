@@ -195,6 +195,45 @@ const main = async () => {
     })
 
 }
+
+async function getRSI(symbol, timer, period) {
+    return new Promise((resolve, reject) => {
+        try {
+            binance.candlesticks(symbol, timer, (error, ticks, symbol) => {
+                if (error) {
+                    console.log(error)
+                    reject(error)
+                } else {
+                    let lastClose = []
+                    ticks.forEach(i => {
+                        let [time, open, high, low, close, volume, closeTime, assetVolume, trades, buyBaseVolume, buyAssetVolume, ignored] = i;
+                        lastClose.push(close)
+                    })
+                    // console.log(lastClose)
+                    var inputRSI = {
+                        values: lastClose,
+                        period: period
+                    };
+                    let a = RSI.calculate(inputRSI)
+                    let last_tick = ticks[ticks.length - 1]
+                    let [time, open, high, low, close, volume, closeTime, assetVolume, trades, buyBaseVolume, buyAssetVolume, ignored] = last_tick;
+                    resolve({
+                        "name": symbol,
+                        "time": timer,
+                        "info": { time, open, high, low, close, volume, closeTime, assetVolume, trades, buyBaseVolume, buyAssetVolume, ignored },
+                        "RSI": a[a.length - 1]
+                    })
+                }
+            })
+        }
+        catch (err) {
+            reject(err)
+        }
+
+    }).catch((err) => {
+        // console.log(err)
+    });
+}
 main();
 
 
