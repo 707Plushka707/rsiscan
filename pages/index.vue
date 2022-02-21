@@ -18,7 +18,6 @@
               <div class="btn-list">
                 <a href="#" class="btn btn-primary d-none d-sm-inline-block">
                   <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-
                   Cấu Hình
                 </a>
               </div>
@@ -34,20 +33,41 @@
               <div class="card">
                 <div class="table-responsive">
                   <b-row>
-                    <b-col cols="11" class="my-1">
-                      <b-form-group
-                        label="RSI 15M"
-                        label-cols="4"
-                        label-align="right"
-                        class="mb-0"
-                      >
-                        <b-input-group>
-                          <b-form-input
-                            v-model="rsi15mRule"
-                            type="search"
-                          ></b-form-input>
-                        </b-input-group>
-                      </b-form-group>
+                    <b-col cols="12">
+                      <b-form inline>
+                        <label>Coin</label>
+                        <b-form-input
+                          style="text-transform: uppercase"
+                          v-model="filterName"
+                          class="m-2"
+                          debounce="400"
+                          type="search"
+                        ></b-form-input>
+                        <label>RSI 15M</label>
+                        <b-form-input
+                          style="text-transform: uppercase"
+                          v-model="rsi15mRule"
+                          class="m-2"
+                          debounce="400"
+                          type="search"
+                        ></b-form-input>
+                        <label>RSI 5M</label>
+                        <b-form-input
+                          style="text-transform: uppercase"
+                          v-model="rsi5mRule"
+                          class="m-2"
+                          debounce="400"
+                          type="search"
+                        ></b-form-input>
+                        <label>Volume</label>
+                        <b-form-input
+                          style="text-transform: uppercase"
+                          v-model="volumeRule"
+                          class="m-2"
+                          debounce="400"
+                          type="search"
+                        ></b-form-input>
+                      </b-form>
                     </b-col>
                   </b-row>
 
@@ -58,12 +78,13 @@
                       class="text-center"
                       striped
                       hover
-                      :items="listpair"
+                      :items="getPairlist"
                       :fields="fields"
                       show-empty
                       :sort-by.sync="sortBy"
                       :sort-desc.sync="sortDesc"
                       :tbody-transition-props="transProps"
+                      :filter="filterName"
                     >
                       <template #cell(#)="data">
                         {{ data.index + 1 }}
@@ -118,17 +139,18 @@ export default {
       transProps: {
         name: "flip-list",
       },
+      filterName: null,
       fields: [],
       items: [],
       listpair: [],
       dataReady: false,
       fetchStatus: false,
-      rsi5mRule: 0,
+      rsi5mRule: 10,
       rsi15mRule: 50,
+      volumeRule: 1,
       filter: null,
       filterOn: [],
       fields: [
-        { key: "#" },
         { key: "name", sortable: true },
         {
           key: "rsi15m.RSI",
@@ -142,7 +164,7 @@ export default {
           sortable: true,
           label: "Price",
           formatter: (value, key, item) => {
-            return parseFloat(value).toFixed(4);
+            return parseFloat(value.toString());
           },
         },
         {
@@ -150,13 +172,29 @@ export default {
           sortable: true,
           label: "Volume",
           formatter: (value, key, item) => {
-            return parseFloat(value).toFixed(0);
+            return this.formatSoTien(parseFloat(value.toString()).toFixed(0));
           },
         },
       ],
     };
   },
-  computed: {},
+  computed: {
+    getPairlist() {
+      let newList = [];
+      this.listpair.map((item) => {
+        if (
+          item.rsi5m &&
+          item.rsi15m &&
+          item.rsi15m.RSI >= this.rsi15mRule &&
+          item.rsi5m.RSI >= this.rsi5mRule &&
+          parseFloat(item.info.volume) >= this.volumeRule
+        ) {
+          newList.push(item);
+        }
+      });
+      return newList;
+    },
+  },
   async mounted() {
     this.getData();
     setInterval(() => {
@@ -164,17 +202,13 @@ export default {
     }, 5000); //chay moi 5p 1 lan
   },
   methods: {
-    filter15m(row, filter) {
-      console.log(row);
-      if (row.age >= filter) {
-        return false;
-      } else {
-        return true;
-      }
+    formatSoTien(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+
     getPrice(item) {
-      let price = parseFloat(item.info.close);
-      return price.toFixed(4);
+      let price = parseFloat(item.info.close.toString());
+      return 1;
     },
     getVolume(item) {
       let volume = parseFloat(item.info.volume);
