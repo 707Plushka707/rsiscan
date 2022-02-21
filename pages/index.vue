@@ -133,172 +133,247 @@
     </div>
 
     <b-modal
-      size="lg"
+      size="xl"
       no-close-on-backdrop
       id="modalCauHinh"
       title="Cấu Hình Server"
     >
-      <b-form-row>
-        <b-col cols="6">
-          <b-form-group
-            label="Binance Delay"
-            description="Thời gian delay các vòng để tránh bị BAN IP từ binance "
-          >
-            <b-form-input
-              v-model="serverConfig.delayScript"
-              type="number"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="6">
-          <b-form-group
-            label="Chu Kì RSI"
-            description="Cách tính RSI dựa trên chu kì, ví dụ RSI(6), RSI(14)"
-          >
-            <b-form-input
-              type="number"
-              v-model="serverConfig.period"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
+      <b-row>
+        <b-col cols="8">
+          <b-form-row>
+            <b-col cols="6">
+              <b-form-group
+                label="Binance Delay"
+                description="Thời gian delay các vòng để tránh bị BAN IP từ binance "
+              >
+                <b-form-input
+                  v-model="serverConfig.delayScript"
+                  type="number"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col cols="6">
+              <b-form-group
+                label="Chu Kì RSI"
+                description="Cách tính RSI dựa trên chu kì, ví dụ RSI(6), RSI(14)"
+              >
+                <b-form-input
+                  type="number"
+                  v-model="serverConfig.period"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-form-row>
 
-      <b-form-group
-        label="Pair List"
-        description="Danh sách các cặp giao dịch, cách nhau bằng dấu , "
-      >
-        <b-form-textarea
-          rows="6"
-          v-model="serverConfig.pairList"
-          required
-        ></b-form-textarea>
-      </b-form-group>
-      <b-form-row>
-        <b-col cols="4">
           <b-form-group
-            label="RSI 15M"
-            description="Cấu hình lọc RSI 15M nặc định"
-          >
-            <b-form-input
-              v-model="serverConfig.rsi15m"
-              type="number"
-              min="0"
-              max="100"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="4">
-          <b-form-group
-            label="RSI 5M"
-            description="Cấu hình lọc RSI 5M mặc định"
-          >
-            <b-form-input
-              type="number"
-              min="0"
-              max="100"
-              v-model="serverConfig.rsi5m"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="4">
-          <b-form-group
-            label="Clien Refresh"
-            description="Thời gian lấy dữ liệu từ phía client"
-          >
-            <b-form-input
-              type="number"
-              min="0"
-              max="100"
-              v-model="serverConfig.delayClient"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="6">
-          <b-form-group
-            label="Volume"
-            description="Cấu hình lọc Volume mặc định"
-          >
-            <b-form-input
-              type="number"
-              v-model="serverConfig.volume"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="6">
-          <b-form-group
-            label="Chu Kì BB"
-            description="Chu kì lấy BB của watchlist"
-          >
-            <b-form-input
-              type="number"
-              v-model="serverConfig.bbperiod"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="6">
-          <b-row>
-            <b-col cols="6">
-              <b-form-group
-                label="Thông Báo "
-                description="Bật thông báo qua email khi RSI 15M,RSI5M vượt ngưỡng"
-              >
-                <b-form-checkbox
-                  switch
-                  v-model="serverConfig.enaleNoti"
-                  required
-                ></b-form-checkbox>
-              </b-form-group>
-            </b-col>
-            <b-col cols="6">
-              <b-form-group
-                label="BB listwatch "
-                description="Bật BB listwatch"
-              >
-                <b-form-checkbox
-                  switch
-                  v-model="serverConfig.bblistWatch"
-                  required
-                ></b-form-checkbox>
-              </b-form-group>
-            </b-col>
-            <b-col cols="12">
-              <b-form-group label="RSI 15M Noti" description="RSI 15M cảnh báo">
-                <b-form-input
-                  type="number"
-                  v-model="serverConfig.rsi15mNoti"
-                  required
-                ></b-form-input> </b-form-group
-            ></b-col>
-            <b-col cols="12">
-              <b-form-group label="RSI 5M Noti" description="RSI 15M cảnh báo">
-                <b-form-input
-                  type="number"
-                  v-model="serverConfig.rsi5mNoti"
-                  required
-                ></b-form-input> </b-form-group
-            ></b-col>
-          </b-row>
-        </b-col>
-        <b-col cols="6">
-          <b-form-group
-            label="Email Nhận Thông Báo"
-            description="Cẩn thận gây nhức đầu,điền email ai nấy phải chịu,cách nhau bằng dấu , nếu muốn nhận nhiều"
+            label="Pair List"
+            description="Danh sách các cặp giao dịch, cách nhau bằng dấu , "
           >
             <b-form-textarea
-              rows="8"
-              v-model="serverConfig.listEmail"
+              rows="6"
+              v-model="serverConfig.pairList"
               required
             ></b-form-textarea>
           </b-form-group>
+          <b-form-row>
+            <b-col cols="4">
+              <b-form-group
+                label="RSI 15M"
+                description="Cấu hình lọc RSI 15M nặc định"
+              >
+                <b-form-input
+                  v-model="serverConfig.rsi15m"
+                  type="number"
+                  min="0"
+                  max="100"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col cols="4">
+              <b-form-group
+                label="RSI 5M"
+                description="Cấu hình lọc RSI 5M mặc định"
+              >
+                <b-form-input
+                  type="number"
+                  min="0"
+                  max="100"
+                  v-model="serverConfig.rsi5m"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col cols="4">
+              <b-form-group
+                label="Clien Refresh"
+                description="Thời gian lấy dữ liệu từ phía client"
+              >
+                <b-form-input
+                  type="number"
+                  min="0"
+                  max="100"
+                  v-model="serverConfig.delayClient"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col cols="6">
+              <b-form-group
+                label="Volume"
+                description="Cấu hình lọc Volume mặc định"
+              >
+                <b-form-input
+                  type="number"
+                  v-model="serverConfig.volume"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col cols="6">
+              <b-form-group
+                label="Chu Kì BB"
+                description="Chu kì lấy BB của watchlist"
+              >
+                <b-form-input
+                  type="number"
+                  v-model="serverConfig.bbperiod"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col cols="6">
+              <b-row>
+                <b-col cols="6">
+                  <b-form-group
+                    label="Thông Báo "
+                    description="Bật thông báo qua email khi RSI 15M,RSI5M vượt ngưỡng"
+                  >
+                    <b-form-checkbox
+                      switch
+                      v-model="serverConfig.enaleNoti"
+                      required
+                    ></b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="6">
+                  <b-form-group
+                    label="BB listwatch "
+                    description="Bật BB listwatch"
+                  >
+                    <b-form-checkbox
+                      switch
+                      v-model="serverConfig.bblistWatch"
+                      required
+                    ></b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12">
+                  <b-form-group
+                    label="RSI 15M Noti"
+                    description="RSI 15M cảnh báo"
+                  >
+                    <b-form-input
+                      type="number"
+                      v-model="serverConfig.rsi15mNoti"
+                      required
+                    ></b-form-input> </b-form-group
+                ></b-col>
+                <b-col cols="12">
+                  <b-form-group
+                    label="RSI 5M Noti"
+                    description="RSI 15M cảnh báo"
+                  >
+                    <b-form-input
+                      type="number"
+                      v-model="serverConfig.rsi5mNoti"
+                      required
+                    ></b-form-input> </b-form-group
+                ></b-col>
+              </b-row>
+            </b-col>
+            <b-col cols="6">
+              <b-form-group
+                label="Email Nhận Thông Báo"
+                description="Cẩn thận gây nhức đầu,điền email ai nấy phải chịu,cách nhau bằng dấu , nếu muốn nhận nhiều"
+              >
+                <b-form-textarea
+                  rows="8"
+                  v-model="serverConfig.listEmail"
+                  required
+                ></b-form-textarea>
+              </b-form-group>
+            </b-col>
+          </b-form-row>
         </b-col>
-      </b-form-row>
+        <b-col cols="4">
+          <b-row>
+            <b-col cols="12">
+              <b-row>
+                <b-col cols="6">
+                  <b-form-group
+                    label="Copy Trade "
+                    description="Mở Khung Copy Trade"
+                  >
+                    <b-form-checkbox
+                      switch
+                      v-model="serverConfig.enableCopyTrade"
+                      required
+                    ></b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="6">
+                  <b-form-group
+                    label="Thông Báo"
+                    description="Gửi thông báo qua email khi có có order"
+                  >
+                    <b-form-checkbox
+                      switch
+                      v-model="serverConfig.enableNoticopyTrade"
+                      required
+                    ></b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12">
+                  <b-form-group
+                    label="Email Nhận thông báo"
+                    description="Danh sách email sẽ nhận thông báo khi có trade xảy ra"
+                  >
+                    <b-form-textarea
+                      rows="8"
+                      v-model="serverConfig.listEmailCopyTradeNoti"
+                      required
+                    ></b-form-textarea> </b-form-group
+                ></b-col>
+                <b-col cols="12">
+                  <b-form-group
+                    label="List Account(cẩn thận)"
+                    description="Danh sách list account chủ chốt trade từ đó"
+                  >
+                    <b-form-textarea
+                      rows="8"
+                      v-model="serverConfig.listAccountCopyTrade"
+                      required
+                    ></b-form-textarea> </b-form-group
+                ></b-col>
+                <b-col cols="12">
+                  <b-form-group
+                    label="List Account Bot(cẩn thận)"
+                    description="Danh sách list account sẽ nhận tín hiệu từ Copy Trade"
+                  >
+                    <b-form-textarea
+                      rows="8"
+                      v-model="serverConfig.listAccountCopyTradeClient"
+                      required
+                    ></b-form-textarea> </b-form-group
+                ></b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
     </b-modal>
     <footer class="footer footer-transparent d-print-none">
       <div class="container-xl">
@@ -491,6 +566,55 @@ export default {
         enaleNoti: false,
         rsi15mNoti: 80,
         rsi5mNoti: 90,
+        enableCopyTrade: true,
+        enableNoticopyTrade: false,
+        listEmailCopyTradeNoti: [
+          {
+            name: "Bảo",
+            email: "deptraivodoi_taigioivosong_numberonevutru@gmail.com",
+          },
+          {
+            name: "kiên",
+            email: "kienthichga100kg@gmail.com",
+          },
+          {
+            name: "thành",
+            email: "thanhuongruouthuavo@gmail.com",
+          },
+          ,
+          {
+            name: "thắng",
+            email: "mtkscamtaocaodauthang@gmail.com",
+          },
+        ],
+        listAccountCopyTradeClient: [
+          {
+            AccountName: "example",
+            Exchange: "Binance",
+            APIKey: "xxxx-xxxx-xxxx",
+            APISerect: "xxxx-xxxx-xxxx",
+          },
+          {
+            AccountName: "example",
+            Exchange: "Binance",
+            APIKey: "xxxx-xxxx-xxxx",
+            APISerect: "xxxx-xxxx-xxxx",
+          },
+        ],
+        listAccountCopyTrade: [
+          {
+            AccountName: "example",
+            Exchange: "Binance",
+            APIKey: "xxxx-xxxx-xxxx",
+            APISerect: "xxxx-xxxx-xxxx",
+          },
+          {
+            AccountName: "example",
+            Exchange: "Binance",
+            APIKey: "xxxx-xxxx-xxxx",
+            APISerect: "xxxx-xxxx-xxxx",
+          },
+        ],
       },
       sortBy: "rsi15m.RSI",
       sortDesc: true,
