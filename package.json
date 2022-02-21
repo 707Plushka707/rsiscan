@@ -21,7 +21,8 @@
     "ccxt": "^1.22.7",
     "delay": "^5.0.0",
     "node-binance-api": "^0.13.1",
-    "express": "~4.16.1"
+    "express": "~4.16.1",
+    "technicalindicators": "^3.1.0"
   },
   "devDependencies": {}
 }
