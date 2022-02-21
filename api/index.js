@@ -171,7 +171,7 @@ const main = async () => {
     })
     Promise.all(RSIlist).then(data => {
         //  console.log(data)
-        fs.writeFile('rsi.json', JSON.stringify(data), err => {
+        fs.writeFile('/rsi.json', JSON.stringify(data), err => {
             const t = new Date();
             if (err) {
                 console.log(err)

@@ -216,7 +216,7 @@ export default {
     getData() {
       // this.dataReady = false;
       console.log("fetch...");
-      fetch("http://localhost:3000/rsi")
+      fetch("/rsi")
         .then((data) => data.json())
         .then((data) => {
           //  console.log(data)
