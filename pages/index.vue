@@ -216,7 +216,7 @@ export default {
     getData() {
       // this.dataReady = false;
       console.log("fetch...");
-      fetch("/rsi")
+      fetch("https://baotmrsi.herokuapp.com/rsi")
         .then((data) => data.json())
         .then((data) => {
           //  console.log(data)
