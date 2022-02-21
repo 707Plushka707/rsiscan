@@ -37,8 +37,8 @@
               <div class="card">
                 <div class="table-responsive">
                   <b-row>
-                    <b-col cols="12">
-                      <div class="mx-auto">
+                    <b-col cols="12" class="">
+                      <div>
                         <b-form inline>
                           <label>Coin</label>
                           <b-form-input
@@ -211,12 +211,24 @@
             ></b-form-input>
           </b-form-group>
         </b-col>
+        <b-col cols="6">
+          <b-form-group
+            label="Chu Kì BB"
+            description="Chu kì lấy BB của watchlist"
+          >
+            <b-form-input
+              type="number"
+              v-model="serverConfig.bbperiod"
+              required
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
       </b-form-row>
     </b-modal>
     <footer class="footer footer-transparent d-print-none">
       <div class="container-xl">
         <div class="row text-center align-items-center flex-row-reverse">
-          <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+          <div class="col-12">
             <ul class="list-inline list-inline-dots mb-0">
               <li class="list-inline-item">
                 Copyright &copy; 2021
@@ -256,6 +268,7 @@ export default {
         rsi15m: 50,
         rsi5m: 20,
         volume: 1,
+        bbperiod: 6,
       },
       sortBy: "rsi15m.RSI",
       sortDesc: true,
