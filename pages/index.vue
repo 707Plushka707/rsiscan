@@ -96,32 +96,74 @@
                             này!
                           </p>
                         </template>
-                        <template #cell(#)="data">
-                          {{ data.index + 1 }}
+
+                        <template #cell(name)="data">
+                          <div class="namePairList">{{ data.item.name }}</div>
+                        </template>
+                        <template #cell(tool)="data">
+                          <div
+                            class="addToBBPairList"
+                            @click="addToBBWatchList(data.item)"
+                          >
+                            →
+                          </div>
                         </template>
                       </b-table>
                     </b-col>
                     <b-col col lg="3" md="12" sm="12">
-                      <b-table
-                        outlined
-                        head-variant="dark"
-                        class="text-center"
-                        striped
-                        hover
-                        :items="binanceWatchList"
-                        :fields="fieldsBinanceWatchlist"
-                        show-empty
-                        :sort-by.sync="sortBy"
-                        :sort-desc.sync="sortDesc"
-                        :tbody-transition-props="transProps"
-                      >
-                        <template #empty="">
-                          <p>Chưa có dữ liệu...</p>
-                        </template>
-                        <template #cell(#)="data">
-                          {{ data.index + 1 }}
-                        </template>
-                      </b-table>
+                      <b-row>
+                        <b-col cols="12">
+                          <b-table
+                            outlined
+                            head-variant="dark"
+                            class="text-center"
+                            striped
+                            hover
+                            :items="binanceWatchList"
+                            :fields="fieldsBinanceWatchlist"
+                            show-empty
+                            :sort-by.sync="sortBy"
+                            :sort-desc.sync="sortDesc"
+                            :tbody-transition-props="transProps"
+                          >
+                            <template #empty="">
+                              <p>Chưa có dữ liệu...</p>
+                            </template>
+
+                            <template #cell(name)="data">
+                              <p class="namePairList">{{ data.item.name }}</p>
+                            </template>
+                            <template #cell(tool)="data">
+                              <div
+                                class="addToBBPairList"
+                                @click="removeBBWatchList(data.item)"
+                              >
+                                ☒
+                              </div>
+                            </template>
+                          </b-table>
+                        </b-col>
+                        <b-col cols="12">
+                          <b-table
+                            outlined
+                            head-variant="dark"
+                            class="text-center"
+                            striped
+                            hover
+                            :items="orderWatchList"
+                            :fields="fieldsCopyTradeWatchlist"
+                            show-empty
+                            :tbody-transition-props="transProps"
+                          >
+                            <template #empty="">
+                              <p>Chưa có dữ liệu...</p>
+                            </template>
+                            <template #cell(#)="data">
+                              {{ data.index + 1 }}
+                            </template>
+                          </b-table>
+                        </b-col>
+                      </b-row>
                     </b-col>
                   </b-row>
                 </div>
@@ -141,7 +183,7 @@
       <b-row>
         <b-col cols="8">
           <b-form-row>
-            <b-col cols="6">
+            <b-col cols="3">
               <b-form-group
                 label="Binance Delay"
                 description="Thời gian delay các vòng để tránh bị BAN IP từ binance "
@@ -153,7 +195,7 @@
                 ></b-form-input>
               </b-form-group>
             </b-col>
-            <b-col cols="6">
+            <b-col cols="3">
               <b-form-group
                 label="Chu Kì RSI"
                 description="Cách tính RSI dựa trên chu kì, ví dụ RSI(6), RSI(14)"
@@ -161,6 +203,28 @@
                 <b-form-input
                   type="number"
                   v-model="serverConfig.period"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col cols="3">
+              <b-form-group
+                label="Site Protection"
+                description="Bật chế độ password"
+              >
+                <b-form-checkbox
+                  switch
+                  v-model="serverConfig.enablePassword"
+                  required
+                ></b-form-checkbox>
+              </b-form-group> </b-col
+            ><b-col cols="3">
+              <b-form-group
+                label="Password"
+                description="Password để đăng nhập"
+              >
+                <b-form-input
+                  v-model="serverConfig.sitePassword"
                   required
                 ></b-form-input>
               </b-form-group>
@@ -412,6 +476,8 @@ export default {
   data() {
     return {
       serverConfig: {
+        enablePassword: false,
+        sitePassword: "anhbaodeptraivodoi",
         delayScript: 20,
         delayClient: 5,
         period: 6,
@@ -566,7 +632,7 @@ export default {
         enaleNoti: false,
         rsi15mNoti: 80,
         rsi5mNoti: 90,
-        enableCopyTrade: true,
+        enableCopyTrade: false,
         enableNoticopyTrade: false,
         listEmailCopyTradeNoti: [
           {
@@ -657,17 +723,29 @@ export default {
             return this.formatSoTien(parseFloat(value.toString()).toFixed(0));
           },
         },
+        {
+          key: "tool",
+          label: "→",
+        },
       ],
       binanceWatchList: [],
-      fieldsBinanceWatchlist: [
+      orderWatchList: [],
+      fieldsCopyTradeWatchlist: [
         { key: "#" },
-        { key: "Pair" },
+        { key: "name" },
+        {
+          key: "TT",
+        },
+      ],
+      fieldsBinanceWatchlist: [
+        { key: "name", label: "Pair" },
         {
           key: "BB",
         },
         {
           key: "Windows",
         },
+        { key: "tool", label: "#" },
       ],
     };
   },
@@ -695,6 +773,19 @@ export default {
     }, 5000); //chay moi 5p 1 lan
   },
   methods: {
+    removeBBWatchList(item) {
+      let name = item.name;
+      let newList = [];
+      this.binanceWatchList.filter((e) => {
+        if (e.name != name) {
+          newList.push(e);
+        }
+      });
+      this.binanceWatchList = newList;
+    },
+    addToBBWatchList(item) {
+      this.binanceWatchList.push(item);
+    },
     formatSoTien(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
@@ -800,5 +891,20 @@ export default {
 <style scoped>
 table .flip-list-move {
   transition: transform 1s;
+}
+.namePairList {
+  font-weight: 700;
+}
+.namePairList:hover {
+  color: red;
+  cursor: pointer;
+}
+.addToBBPairList {
+  color: blue;
+  font-weight: 800;
+}
+.addToBBPairList:hover {
+  color: red;
+  cursor: pointer;
 }
 </style>
