@@ -784,7 +784,28 @@ export default {
       this.binanceWatchList = newList;
     },
     addToBBWatchList(item) {
-      this.binanceWatchList.push(item);
+      let name = item.name;
+      let newList = [];
+      if (this.binanceWatchList.length > 0) {
+        this.binanceWatchList.filter((e) => {
+          if (e.name != name) {
+            console.log("khong trung");
+            newList.push(item);
+          } else {
+            this.$bvToast.toast(`Trùng Mã Trong Watchlist`, {
+              title: "Thông Báo",
+              autoHideDelay: 5000,
+              variant: "warning",
+            });
+            return;
+          }
+        });
+      } else {
+        newList.push(item);
+      }
+      if (newList.length > 0) {
+        this.binanceWatchList = newList;
+      }
     },
     formatSoTien(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
