@@ -35,9 +35,9 @@
           <div class="row row-deck row-cards">
             <div class="col-12">
               <div class="card">
-                <div class="table-responsive">
+                <b-container>
                   <b-row>
-                    <b-col cols="12" class="">
+                    <b-col cols="12">
                       <div>
                         <b-form inline>
                           <label>Coin</label>
@@ -75,98 +75,217 @@
                         </b-form>
                       </div>
                     </b-col>
-                    <b-col col lg="9" md="12" sm="12">
-                      <b-table
-                        outlined
-                        head-variant="dark"
-                        class="text-center"
-                        striped
-                        hover
-                        :items="getPairlist"
-                        :fields="fields"
-                        show-empty
-                        :sort-by.sync="sortBy"
-                        :sort-desc.sync="sortDesc"
-                        :tbody-transition-props="transProps"
-                        :filter="filterName"
-                      >
-                        <template #empty="">
-                          <p>
-                            Không có thông tin phù hợp với các trường lọc lúc
-                            này!
-                          </p>
-                        </template>
-
-                        <template #cell(name)="data">
-                          <div class="namePairList">{{ data.item.name }}</div>
-                        </template>
-                        <template #cell(tool)="data">
-                          <div
-                            class="addToBBPairList"
-                            @click="addToBBWatchList(data.item)"
-                          >
-                            →
-                          </div>
-                        </template>
-                      </b-table>
-                    </b-col>
-                    <b-col col lg="3" md="12" sm="12">
-                      <b-row>
-                        <b-col cols="12">
-                          <b-table
-                            outlined
-                            head-variant="dark"
-                            class="text-center"
-                            striped
-                            hover
-                            :items="binanceWatchList"
-                            :fields="fieldsBinanceWatchlist"
-                            show-empty
-                            :sort-by.sync="sortBy"
-                            :sort-desc.sync="sortDesc"
-                            :tbody-transition-props="transProps"
-                          >
-                            <template #empty="">
-                              <p>Chưa có dữ liệu...</p>
-                            </template>
-
-                            <template #cell(name)="data">
-                              <p class="namePairList">{{ data.item.name }}</p>
-                            </template>
-                            <template #cell(tool)="data">
-                              <div
-                                class="addToBBPairList"
-                                @click="removeBBWatchList(data.item)"
-                              >
-                                ☒
-                              </div>
-                            </template>
-                          </b-table>
-                        </b-col>
-                        <b-col cols="12">
-                          <b-table
-                            outlined
-                            head-variant="dark"
-                            class="text-center"
-                            striped
-                            hover
-                            :items="orderWatchList"
-                            :fields="fieldsCopyTradeWatchlist"
-                            show-empty
-                            :tbody-transition-props="transProps"
-                          >
-                            <template #empty="">
-                              <p>Chưa có dữ liệu...</p>
-                            </template>
-                            <template #cell(#)="data">
-                              {{ data.index + 1 }}
-                            </template>
-                          </b-table>
-                        </b-col>
-                      </b-row>
-                    </b-col>
                   </b-row>
-                </div>
+                </b-container>
+                <b-row>
+                  <b-col col lg="9" md="12" sm="12">
+                    <b-table
+                      outlined
+                      head-variant="dark"
+                      class="text-center"
+                      striped
+                      hover
+                      :items="getPairlist"
+                      :fields="fields"
+                      show-empty
+                      :sort-by.sync="sortBy"
+                      :sort-desc.sync="sortDesc"
+                      :tbody-transition-props="transProps"
+                      :filter="filterName"
+                    >
+                      <template #empty="">
+                        <p>
+                          Không có thông tin phù hợp với các trường lọc lúc này!
+                        </p>
+                      </template>
+
+                      <template #cell(name)="data">
+                        <div class="namePairList">{{ data.item.name }}</div>
+                      </template>
+                      <template #cell(rsi15m)="data">
+                        <div class="rsiNumber">
+                          <strong
+                            v-bind:style="
+                              data.item.currentValue.rsi15m >
+                              data.item.oldValue.rsi15m
+                                ? 'color:green'
+                                : 'color:red'
+                            "
+                          >
+                            {{ data.item.currentValue.rsi15m }}</strong
+                          >
+                          <sub class="text-muted">
+                            {{ data.item.oldValue.rsi15m }}</sub
+                          >
+                          <span
+                            style="color: green"
+                            v-if="
+                              data.item.currentValue.rsi15m >
+                              data.item.oldValue.rsi15m
+                            "
+                            >↑</span
+                          >
+                          <span v-else style="color: red">↓</span>
+                        </div>
+                      </template>
+                      <template #cell(rsi5m)="data">
+                        <div class="rsiNumber">
+                          <strong
+                            v-bind:style="
+                              data.item.currentValue.rsi5m >
+                              data.item.oldValue.rsi5m
+                                ? 'color:green'
+                                : 'color:red'
+                            "
+                          >
+                            {{ data.item.currentValue.rsi5m }}</strong
+                          >
+                          <sub class="text-muted">
+                            {{ data.item.oldValue.rsi5m }}</sub
+                          >
+                          <span
+                            style="color: green"
+                            v-if="
+                              data.item.currentValue.rsi5m >
+                              data.item.oldValue.rsi5m
+                            "
+                            >↑</span
+                          >
+                          <span v-else style="color: red">↓</span>
+                        </div>
+                      </template>
+                      <template #cell(price)="data">
+                        <div class="rsiNumber">
+                          <strong
+                            v-bind:style="
+                              data.item.currentValue.last_tick.close >
+                              data.item.oldValue.last_tick.close
+                                ? 'color:green'
+                                : 'color:red'
+                            "
+                          >
+                            {{
+                              parseFloat(data.item.currentValue.last_tick.close)
+                            }}</strong
+                          >
+                          <sub class="text-muted">
+                            {{
+                              parseFloat(data.item.oldValue.last_tick.close)
+                            }}</sub
+                          >
+                          <span
+                            style="color: green"
+                            v-if="
+                              data.item.currentValue.last_tick.close >
+                              data.item.oldValue.last_tick.close
+                            "
+                            >↑</span
+                          >
+                          <span v-else style="color: red">↓</span>
+                        </div>
+                      </template>
+                      <template #cell(volume)="data">
+                        <div class="rsiNumber">
+                          <strong
+                            v-bind:style="
+                              data.item.currentValue.last_tick.volume >
+                              data.item.oldValue.last_tick.volume
+                                ? 'color:green'
+                                : 'color:red'
+                            "
+                          >
+                            {{
+                              formatSoTien(parseFloat(
+                                data.item.currentValue.last_tick.volume
+                              ).toFixed(0))
+                            }}</strong
+                          >
+                          <sub class="text-muted">
+                            {{
+                              formatSoTien(
+                                parseFloat(
+                                  data.item.oldValue.last_tick.volume
+                                ).toFixed(0)
+                              )
+                            }}</sub
+                          >
+                          <span
+                            style="color: green"
+                            v-if="
+                              data.item.currentValue.last_tick.volume >
+                              data.item.oldValue.last_tick.volume
+                            "
+                            >↑</span
+                          >
+                          <span v-else style="color: red">↓</span>
+                        </div>
+                      </template>
+                      <template #cell(tool)="data">
+                        <div
+                          class="addToBBPairList"
+                          @click="addToBBWatchList(data.item)"
+                        >
+                          →
+                        </div>
+                      </template>
+                    </b-table>
+                  </b-col>
+                  <b-col col lg="3" md="12" sm="12">
+                    <b-row>
+                      <b-col cols="12">
+                        <b-table
+                          outlined
+                          head-variant="dark"
+                          class="text-center"
+                          striped
+                          hover
+                          :items="binanceWatchList"
+                          :fields="fieldsBinanceWatchlist"
+                          show-empty
+                          :sort-by.sync="sortBy"
+                          :sort-desc.sync="sortDesc"
+                          :tbody-transition-props="transProps"
+                        >
+                          <template #empty="">
+                            <p>Chưa có dữ liệu...</p>
+                          </template>
+
+                          <template #cell(name)="data">
+                            <p class="namePairList">{{ data.item.name }}</p>
+                          </template>
+                          <template #cell(tool)="data">
+                            <div
+                              class="addToBBPairList"
+                              @click="removeBBWatchList(data.item)"
+                            >
+                              ☒
+                            </div>
+                          </template>
+                        </b-table>
+                      </b-col>
+                      <b-col cols="12">
+                        <b-table
+                          outlined
+                          head-variant="dark"
+                          class="text-center"
+                          striped
+                          hover
+                          :items="orderWatchList"
+                          :fields="fieldsCopyTradeWatchlist"
+                          show-empty
+                          :tbody-transition-props="transProps"
+                        >
+                          <template #empty="">
+                            <p>Chưa có dữ liệu...</p>
+                          </template>
+                          <template #cell(#)="data">
+                            {{ data.index + 1 }}
+                          </template>
+                        </b-table>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                </b-row>
               </div>
             </div>
           </div>
@@ -701,27 +820,45 @@ export default {
       fields: [
         { key: "name", sortable: true },
         {
-          key: "rsi15m.RSI",
+          key: "rsi15m",
           sortable: true,
           label: "RSI 15M",
           sortDirection: "desc",
+          formatter: (value, key, item) => {
+            return item.currentValue.rsi15m;
+          },
+          sortByFormatted: true,
         },
-        { key: "rsi5m.RSI", sortable: true, label: "RSI 5M" },
         {
-          key: "info.close",
+          key: "rsi5m",
+          sortable: true,
+          label: "RSI 5M",
+          sortDirection: "desc",
+          formatter: (value, key, item) => {
+            return item.currentValue.rsi5m;
+          },
+          sortByFormatted: true,
+        },
+        {
+          key: "price",
           sortable: true,
           label: "Price",
+          sortDirection: "desc",
           formatter: (value, key, item) => {
-            return parseFloat(value.toString());
+            return item.currentValue.last_tick.close;
           },
+          sortByFormatted: true,
         },
+
         {
-          key: "info.volume",
+          key: "volume",
           sortable: true,
           label: "Volume",
+          sortDirection: "desc",
           formatter: (value, key, item) => {
-            return this.formatSoTien(parseFloat(value.toString()).toFixed(0));
+            return item.currentValue.last_tick.volume;
           },
+          sortByFormatted: true,
         },
         {
           key: "tool",
@@ -753,12 +890,11 @@ export default {
     getPairlist() {
       let newList = [];
       this.listpair.map((item) => {
+        let volume = item.currentValue.last_tick.volume;
         if (
-          item.rsi5m &&
-          item.rsi15m &&
-          item.rsi15m.RSI >= this.rsi15mRule &&
-          item.rsi5m.RSI >= this.rsi5mRule &&
-          parseFloat(item.info.volume) >= this.volumeRule
+          item.currentValue.rsi15m >= this.rsi15mRule &&
+          item.currentValue.rsi5m >= this.rsi5mRule &&
+          volume >= this.volumeRule
         ) {
           newList.push(item);
         }
@@ -785,7 +921,7 @@ export default {
     },
     addToBBWatchList(item) {
       let name = item.name;
-      let newList = [];
+      let newList = this.binanceWatchList;
       if (this.binanceWatchList.length > 0) {
         this.binanceWatchList.filter((e) => {
           if (e.name != name) {
@@ -811,98 +947,16 @@ export default {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
 
-    getPrice(item) {
-      let price = parseFloat(item.info.close.toString());
-      return 1;
-    },
-    getVolume(item) {
-      let volume = parseFloat(item.info.volume);
-      return volume.toFixed(0);
-    },
-    getRSI15M(item) {
-      let result;
-      if (item.rsi15m) {
-        result = item.rsi15m.RSI;
-      } else {
-        result = "x";
-      }
-      return result;
-    },
-
-    getRSI5M(item) {
-      let result;
-      if (item.rsi5m) {
-        result = item.rsi5m.RSI;
-      } else {
-        result = "x";
-      }
-      return result;
-    },
-    getName5M(item) {
-      return 1;
-    },
-    getName15M(item) {
-      let result;
-      if (item[0].time === "15m") {
-        result = item[0];
-      } else {
-        return "";
-      }
-      console.log(result);
-      return result.RSI;
-    },
-    filterRSI() {},
     getData() {
       // this.dataReady = false;
+           let url = 'https://baotmrsi.herokuapp.com/rsi'
+      //let url = "http://localhost:3000/rsi";
       console.log("fetch...");
-      fetch("https://baotmrsi.herokuapp.com/rsi")
+      fetch(url)
         .then((data) => data.json())
         .then((data) => {
-          //  console.log(data)
-          let list = [];
-          data.forEach((element) => {
-            if (element) {
-              list.push(element);
-            }
-          });
-          list = list.sort(compare);
-          list = _.groupBy(list, "name");
-
-          let newList = [];
-          _.forOwn(list, (value, key) => {
-            let rsi15;
-            let rsi5;
-            let d = value;
-            for (let i = 0; i < 2; i++) {
-              if (d[i]) {
-                if (d[i].time === "5m") {
-                  rsi5 = d[i];
-                }
-                if (d[i].time === "15m") {
-                  rsi15 = d[i];
-                }
-              } else {
-                if (rsi15) {
-                  rsi5 = null;
-                }
-                if (rsi5) {
-                  rsi15 = null;
-                }
-              }
-            }
-
-            let newObject = {
-              name: key,
-              rsi15m: rsi15,
-              rsi5m: rsi5,
-              ...value[0],
-            };
-            if (rsi15) {
-              newList.push(newObject);
-            }
-          });
-
-          this.listpair = newList;
+       
+          this.listpair = data;
           this.dataReady = true;
         });
     },
