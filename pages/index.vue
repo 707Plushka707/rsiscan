@@ -208,6 +208,18 @@
           <b-spinner variant="primary" small label="Spinning"></b-spinner>
         </template>
       </b-table>
+      <div class="col-auto ms-auto d-print-none">
+        <div class="btn-list">
+          <a
+            href="/dualOrder"
+            target="_blank"
+            class="btn btn-success d-none d-sm-inline-block"
+          >
+            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+            ⇌
+          </a>
+        </div>
+      </div>
     </b-sidebar>
 
     <header class="navbar">
@@ -1379,6 +1391,7 @@ export default {
       });
       this.$cookies.set("watchList", JSON.stringify(ListName));
     },
+
     formatSoTien(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
@@ -1400,7 +1413,6 @@ export default {
       fetch(urlUser)
         .then((data) => data.json())
         .then((data) => {
-          console.log(data);
           this.accountOrder = data;
           this.orderWatchList = data.positions.filter((item) => {
             if (
@@ -1412,6 +1424,12 @@ export default {
               return false;
             }
           });
+          let accountOrder = [];
+          this.orderWatchList.map((item) => {
+            accountOrder.push(item.symbol);
+          });
+          console.log(accountOrder);
+          this.$cookies.set("watchListAccount", JSON.stringify(accountOrder));
         });
     },
   },
