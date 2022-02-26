@@ -1,204 +1,5 @@
 <template>
   <div class="wrapper">
-    <b-sidebar id="mySideBoard" title="Watch List" right width="700px" shadow>
-      <b-table
-        style="font-size: 13px"
-        outlined
-        head-variant="dark"
-        class="text-center"
-        striped
-        hover
-        small
-        :items="binanceWatchList"
-        :fields="fieldsBinanceWatchlist"
-        show-empty
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :tbody-transition-props="transProps"
-      >
-        <template #empty="">
-          <p>Chưa có dữ liệu...</p>
-        </template>
-
-        <template #cell(name)="data">
-          {{ data.item.name }}
-          <span class="linkBinance">
-            <a
-              :href="'https://www.binance.com/en/futures/' + data.item.name"
-              target="_blank"
-              >→</a
-            >
-          </span>
-        </template>
-        <template #cell(price)="data">
-          <p class="namePairList text-left">
-            Price:
-            {{ parseFloat(data.item.currentValue.last_tick.close.toString()) }}
-            <br />
-            RSI 15M:{{ data.item.currentValue.rsi15m }}
-            <br />
-            RSI 5M:{{ data.item.currentValue.rsi5m }}
-            <br />
-            Volume:{{
-              parseFloat(data.item.currentValue.last_tick.volume.toString())
-            }}
-          </p>
-        </template>
-        <template #cell(bb15m)="data">
-          <div class="rsiNumber text-left">
-            <strong
-              v-bind:style="
-                data.item.currentValue.BB15m > data.item.oldValue.BB15m
-                  ? 'color:green'
-                  : 'color:red'
-              "
-            >
-              U:{{ data.item.currentValue.BB15m.upper.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB15m.upper.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB15m.upper >
-                  data.item.oldValue.BB15m.upper
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span>
-
-              <br />M:{{ data.item.currentValue.BB15m.middle.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB15m.middle.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB15m.middle >
-                  data.item.oldValue.BB15m.middle
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span>
-              <br />L:{{ data.item.currentValue.BB15m.lower.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB15m.lower.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB15m.lower >
-                  data.item.oldValue.BB15m.lower
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span><br />
-              PB:{{ data.item.currentValue.BB15m.pb.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB15m.pb.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB15m.pb > data.item.oldValue.BB15m.pb
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span>
-              <br
-            /></strong>
-          </div>
-        </template>
-        <template #cell(bb5m)="data">
-          <div class="rsiNumber text-left">
-            <strong
-              v-bind:style="
-                data.item.currentValue.BB5m > data.item.oldValue.BB5m
-                  ? 'color:green'
-                  : 'color:red'
-              "
-            >
-              U:{{ data.item.currentValue.BB5m.upper.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB5m.upper.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB5m.upper >
-                  data.item.oldValue.BB5m.upper
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span>
-
-              <br />M:{{ data.item.currentValue.BB5m.middle.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB5m.middle.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB5m.middle >
-                  data.item.oldValue.BB5m.middle
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span>
-              <br />L:{{ data.item.currentValue.BB5m.lower.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB5m.lower.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB5m.lower >
-                  data.item.oldValue.BB5m.lower
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span><br />
-              PB:{{ data.item.currentValue.BB5m.pb.toFixed(4) }}
-              <sub class="text-muted">
-                {{ data.item.oldValue.BB5m.pb.toFixed(4) }}</sub
-              >
-              <span
-                style="color: green"
-                v-if="
-                  data.item.currentValue.BB5m.pb > data.item.oldValue.BB5m.pb
-                "
-                >↑</span
-              >
-              <span v-else style="color: red">↓</span>
-              <br
-            /></strong>
-          </div>
-        </template>
-        <template #cell(tool)="data">
-          <div class="addToBBPairList" @click="removeBBWatchList(data.item)">
-            ☒
-          </div> </template
-        ><template #cell(volume)="data">
-          <span>{{
-            parseFloat(data.item.currentValue.last_tick.volume).toFixed(0)
-          }}</span>
-        </template>
-      </b-table>
-    </b-sidebar>
-    <hsc-window-style-metal style="z-index: 2147483647; position: absolute">
-      <hsc-window
-        title="BTCUSDT"
-        :minWidth="500"
-        :minHeight="500"
-        :closeButton="true"
-        :isOpen.sync="isOpen"
-        :resizable="true"
-        :zGroup="0"
-        positionHint="-20 / -100"
-      >
-        <widget></widget>
-      </hsc-window>
-    </hsc-window-style-metal>
     <header class="navbar">
       <div class="container-xl"></div>
     </header>
@@ -212,21 +13,8 @@
               <div class="page-pretitle">RSI Scan</div>
               <h2 class="page-title">Dashboard</h2>
             </div>
-            <div>
-              <b-avatar
-                v-b-toggle.mySideBoard
-                v-for="(item, index) in getBinanceWatchList"
-                :key="index"
-                :text="item.name[0] + item.name[1] + item.name[2]"
-                v-b-tooltip.hover
-                :title="item.name"
-                variant="warning"
-                class="mr-1 watchList"
-              ></b-avatar>
-            </div>
             <!-- Page title actions -->
             <div class="col-auto ms-auto d-print-none">
-              <div></div>
               <div class="btn-list">
                 <a
                   href="#"
@@ -241,7 +29,16 @@
           </div>
         </div>
       </div>
+      <hsc-window-style-metal style="z-index: 1100">
+        <hsc-window title="Window 1" :zGroup="0">
+          Parameters:
 
+          <fieldset>
+            <legend>&beta;</legend>
+            <input type="range" />
+          </fieldset>
+        </hsc-window>
+      </hsc-window-style-metal>
       <div class="page-body">
         <div class="p-2">
           <div class="row row-deck row-cards">
@@ -288,357 +85,225 @@
                       </div>
                     </b-col>
                   </b-row>
-                </b-container>
-                <b-row>
-                  <b-col col lg="12" md="12" sm="12">
-                    <b-table
-                      style="font-size: 13px"
-                      head-variant="dark"
-                      class="text-center"
-                      striped
-                      thead-class="myThClass"
-                      fixed
-                      hover
-                      no-border-collapse
-                      responsive
-                      :items="getPairlist"
-                      :fields="fields"
-                      show-empty
-                      :sort-by.sync="sortBy"
-                      :sort-desc.sync="sortDesc"
-                      :tbody-transition-props="transProps"
-                      :filter="filterName"
-                    >
-                      <template #empty="">
-                        <p>
-                          Không có thông tin phù hợp với các trường lọc lúc này!
-                        </p>
-                      </template>
 
-                      <template #cell(name)="data">
-                        <div class="namePairList">
-                          <span
-                            class="linkBinance"
+                  <b-row>
+                    <b-col col lg="9" md="12" sm="12">
+                      <b-table
+                        head-variant="dark"
+                        class="text-center"
+                        striped
+                        thead-class="myThClass"
+                        sticky-header="800px"
+                        hover
+                        no-border-collapse
+                        responsive
+                        :items="getPairlist"
+                        :fields="fields"
+                        show-empty
+                        :sort-by.sync="sortBy"
+                        :sort-desc.sync="sortDesc"
+                        :tbody-transition-props="transProps"
+                        :filter="filterName"
+                      >
+                        <template #empty="">
+                          <p>
+                            Không có thông tin phù hợp với các trường lọc lúc
+                            này!
+                          </p>
+                        </template>
+
+                        <template #cell(name)="data">
+                          <div class="namePairList">{{ data.item.name }}</div>
+                        </template>
+                        <template #cell(rsi15m)="data">
+                          <div class="rsiNumber">
+                            <strong
+                              v-bind:style="
+                                data.item.currentValue.rsi15m >
+                                data.item.oldValue.rsi15m
+                                  ? 'color:green'
+                                  : 'color:red'
+                              "
+                            >
+                              {{ data.item.currentValue.rsi15m }}</strong
+                            >
+                            <sub class="text-muted">
+                              {{ data.item.oldValue.rsi15m }}</sub
+                            >
+                            <span
+                              style="color: green"
+                              v-if="
+                                data.item.currentValue.rsi15m >
+                                data.item.oldValue.rsi15m
+                              "
+                              >↑</span
+                            >
+                            <span v-else style="color: red">↓</span>
+                          </div>
+                        </template>
+                        <template #cell(rsi5m)="data">
+                          <div class="rsiNumber">
+                            <strong
+                              v-bind:style="
+                                data.item.currentValue.rsi5m >
+                                data.item.oldValue.rsi5m
+                                  ? 'color:green'
+                                  : 'color:red'
+                              "
+                            >
+                              {{ data.item.currentValue.rsi5m }}</strong
+                            >
+                            <sub class="text-muted">
+                              {{ data.item.oldValue.rsi5m }}</sub
+                            >
+                            <span
+                              style="color: green"
+                              v-if="
+                                data.item.currentValue.rsi5m >
+                                data.item.oldValue.rsi5m
+                              "
+                              >↑</span
+                            >
+                            <span v-else style="color: red">↓</span>
+                          </div>
+                        </template>
+                        <template #cell(price)="data">
+                          <div class="rsiNumber">
+                            <strong
+                              v-bind:style="
+                                data.item.currentValue.last_tick.close >
+                                data.item.oldValue.last_tick.close
+                                  ? 'color:green'
+                                  : 'color:red'
+                              "
+                            >
+                              {{
+                                parseFloat(
+                                  data.item.currentValue.last_tick.close
+                                )
+                              }}</strong
+                            >
+                            <sub class="text-muted">
+                              {{
+                                parseFloat(data.item.oldValue.last_tick.close)
+                              }}</sub
+                            >
+                            <span
+                              style="color: green"
+                              v-if="
+                                data.item.currentValue.last_tick.close >
+                                data.item.oldValue.last_tick.close
+                              "
+                              >↑</span
+                            >
+                            <span v-else style="color: red">↓</span>
+                          </div>
+                        </template>
+                        <template #cell(volume)="data">
+                          <div class="rsiNumber">
+                            <strong
+                              v-bind:style="
+                                data.item.currentValue.last_tick.volume >
+                                data.item.oldValue.last_tick.volume
+                                  ? 'color:green'
+                                  : 'color:red'
+                              "
+                            >
+                              {{
+                                formatSoTien(
+                                  parseFloat(
+                                    data.item.currentValue.last_tick.volume
+                                  ).toFixed(0)
+                                )
+                              }}</strong
+                            >
+                            <sub class="text-muted">
+                              {{
+                                formatSoTien(
+                                  parseFloat(
+                                    data.item.oldValue.last_tick.volume
+                                  ).toFixed(0)
+                                )
+                              }}</sub
+                            >
+                            <span
+                              style="color: green"
+                              v-if="
+                                data.item.currentValue.last_tick.volume >
+                                data.item.oldValue.last_tick.volume
+                              "
+                              >↑</span
+                            >
+                            <span v-else style="color: red">↓</span>
+                          </div>
+                        </template>
+                        <template #cell(tool)="data">
+                          <div
+                            class="addToBBPairList"
                             @click="addToBBWatchList(data.item)"
-                            >☆</span
                           >
-                          {{ data.item.name }}
-                          <span class="linkBinance">
-                            <a
-                              :href="
-                                'https://www.binance.com/en/futures/' +
-                                data.item.name
-                              "
-                              target="_blank"
-                              >→</a
-                            >
-                          </span>
-                        </div>
-                      </template>
-                      <template #cell(rsi15m)="data">
-                        <div class="rsiNumber">
-                          <strong
-                            v-bind:style="
-                              data.item.currentValue.rsi15m >
-                              data.item.oldValue.rsi15m
-                                ? 'color:green'
-                                : 'color:red'
-                            "
+                            →
+                          </div>
+                        </template>
+                      </b-table>
+                    </b-col>
+                    <b-col col lg="3" md="12" sm="12">
+                      <b-row>
+                        <b-col cols="12">
+                          <b-table
+                            outlined
+                            head-variant="dark"
+                            class="text-center"
+                            striped
+                            hover
+                            :items="binanceWatchList"
+                            :fields="fieldsBinanceWatchlist"
+                            show-empty
+                            :sort-by.sync="sortBy"
+                            :sort-desc.sync="sortDesc"
+                            :tbody-transition-props="transProps"
                           >
-                            {{ data.item.currentValue.rsi15m }}</strong
-                          >
-                          <sub class="text-muted">
-                            {{ data.item.oldValue.rsi15m }}</sub
-                          >
-                          <span
-                            style="color: green"
-                            v-if="
-                              data.item.currentValue.rsi15m >
-                              data.item.oldValue.rsi15m
-                            "
-                            >↑</span
-                          >
-                          <span v-else style="color: red">↓</span>
-                        </div>
-                      </template>
-                      <template #cell(rsi5m)="data">
-                        <div class="rsiNumber">
-                          <strong
-                            v-bind:style="
-                              data.item.currentValue.rsi5m >
-                              data.item.oldValue.rsi5m
-                                ? 'color:green'
-                                : 'color:red'
-                            "
-                          >
-                            {{ data.item.currentValue.rsi5m }}</strong
-                          >
-                          <sub class="text-muted">
-                            {{ data.item.oldValue.rsi5m }}</sub
-                          >
-                          <span
-                            style="color: green"
-                            v-if="
-                              data.item.currentValue.rsi5m >
-                              data.item.oldValue.rsi5m
-                            "
-                            >↑</span
-                          >
-                          <span v-else style="color: red">↓</span>
-                        </div>
-                      </template>
-                      <template #cell(price)="data">
-                        <div class="rsiNumber">
-                          <strong
-                            v-bind:style="
-                              data.item.currentValue.last_tick.close >
-                              data.item.oldValue.last_tick.close
-                                ? 'color:green'
-                                : 'color:red'
-                            "
-                          >
-                            {{
-                              parseFloat(data.item.currentValue.last_tick.close)
-                            }}</strong
-                          >
-                          <sub class="text-muted">
-                            {{
-                              parseFloat(data.item.oldValue.last_tick.close)
-                            }}</sub
-                          >
-                          <span
-                            style="color: green"
-                            v-if="
-                              data.item.currentValue.last_tick.close >
-                              data.item.oldValue.last_tick.close
-                            "
-                            >↑</span
-                          >
-                          <span v-else style="color: red">↓</span>
-                        </div>
-                      </template>
-                      <template #cell(bb15m)="data">
-                        <div class="rsiNumber text-left">
-                          <strong
-                            v-bind:style="
-                              data.item.currentValue.BB15m >
-                              data.item.oldValue.BB15m
-                                ? 'color:green'
-                                : 'color:red'
-                            "
-                          >
-                            U:{{
-                              data.item.currentValue.BB15m.upper.toFixed(4)
-                            }}
-                            <sub class="text-muted">
-                              {{
-                                data.item.oldValue.BB15m.upper.toFixed(4)
-                              }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB15m.upper >
-                                data.item.oldValue.BB15m.upper
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span>
+                            <template #empty="">
+                              <p>Chưa có dữ liệu...</p>
+                            </template>
 
-                            <br />M:{{
-                              data.item.currentValue.BB15m.middle.toFixed(4)
-                            }}
-                            <sub class="text-muted">
-                              {{
-                                data.item.oldValue.BB15m.middle.toFixed(4)
-                              }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB15m.middle >
-                                data.item.oldValue.BB15m.middle
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span>
-                            <br />L:{{
-                              data.item.currentValue.BB15m.lower.toFixed(4)
-                            }}
-                            <sub class="text-muted">
-                              {{
-                                data.item.oldValue.BB15m.lower.toFixed(4)
-                              }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB15m.lower >
-                                data.item.oldValue.BB15m.lower
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span><br />
-                            PB:{{ data.item.currentValue.BB15m.pb.toFixed(4) }}
-                            <sub class="text-muted">
-                              {{ data.item.oldValue.BB15m.pb.toFixed(4) }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB15m.pb >
-                                data.item.oldValue.BB15m.pb
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span>
-                            <br
-                          /></strong>
-                        </div>
-                      </template>
-                      <template #cell(bb5m)="data">
-                        <div class="rsiNumber text-left">
-                          <strong
-                            v-bind:style="
-                              data.item.currentValue.BB5m >
-                              data.item.oldValue.BB5m
-                                ? 'color:green'
-                                : 'color:red'
-                            "
+                            <template #cell(name)="data">
+                              <p class="namePairList">{{ data.item.name }}</p>
+                            </template>
+                            <template #cell(tool)="data">
+                              <div
+                                class="addToBBPairList"
+                                @click="removeBBWatchList(data.item)"
+                              >
+                                ☒
+                              </div>
+                            </template>
+                          </b-table>
+                        </b-col>
+                        <b-col cols="12">
+                          <b-table
+                            outlined
+                            head-variant="dark"
+                            class="text-center"
+                            striped
+                            hover
+                            :items="orderWatchList"
+                            :fields="fieldsCopyTradeWatchlist"
+                            show-empty
+                            :tbody-transition-props="transProps"
                           >
-                            U:{{ data.item.currentValue.BB5m.upper.toFixed(4) }}
-                            <sub class="text-muted">
-                              {{
-                                data.item.oldValue.BB5m.upper.toFixed(4)
-                              }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB5m.upper >
-                                data.item.oldValue.BB5m.upper
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span>
-
-                            <br />M:{{
-                              data.item.currentValue.BB5m.middle.toFixed(4)
-                            }}
-                            <sub class="text-muted">
-                              {{
-                                data.item.oldValue.BB5m.middle.toFixed(4)
-                              }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB5m.middle >
-                                data.item.oldValue.BB5m.middle
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span>
-                            <br />L:{{
-                              data.item.currentValue.BB5m.lower.toFixed(4)
-                            }}
-                            <sub class="text-muted">
-                              {{
-                                data.item.oldValue.BB5m.lower.toFixed(4)
-                              }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB5m.lower >
-                                data.item.oldValue.BB5m.lower
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span><br />
-                            PB:{{ data.item.currentValue.BB5m.pb.toFixed(4) }}
-                            <sub class="text-muted">
-                              {{ data.item.oldValue.BB5m.pb.toFixed(4) }}</sub
-                            >
-                            <span
-                              style="color: green"
-                              v-if="
-                                data.item.currentValue.BB5m.pb >
-                                data.item.oldValue.BB5m.pb
-                              "
-                              >↑</span
-                            >
-                            <span v-else style="color: red">↓</span>
-                            <br
-                          /></strong>
-                        </div>
-                      </template>
-                      <template #cell(volume)="data">
-                        <div class="rsiNumber">
-                          <strong
-                            v-bind:style="
-                              data.item.currentValue.last_tick.volume >
-                              data.item.oldValue.last_tick.volume
-                                ? 'color:green'
-                                : 'color:red'
-                            "
-                          >
-                            {{
-                              formatSoTien(
-                                parseFloat(
-                                  data.item.currentValue.last_tick.volume
-                                ).toFixed(0)
-                              )
-                            }}</strong
-                          >
-                          <sub class="text-muted">
-                            {{
-                              formatSoTien(
-                                parseFloat(
-                                  data.item.oldValue.last_tick.volume
-                                ).toFixed(0)
-                              )
-                            }}</sub
-                          >
-                          <span
-                            style="color: green"
-                            v-if="
-                              data.item.currentValue.last_tick.volume >
-                              data.item.oldValue.last_tick.volume
-                            "
-                            >↑</span
-                          >
-                          <span v-else style="color: red">↓</span>
-                        </div>
-                      </template>
-                    </b-table>
-                  </b-col>
-                  <b-col col lg="3" md="12" sm="12">
-                    <b-row>
-                      <b-col cols="12"> </b-col>
-                      <b-col cols="12">
-                        <b-table
-                          outlined
-                          head-variant="dark"
-                          class="text-center"
-                          striped
-                          hover
-                          :items="orderWatchList"
-                          :fields="fieldsCopyTradeWatchlist"
-                          show-empty
-                          :tbody-transition-props="transProps"
-                        >
-                          <template #empty="">
-                            <p>Chưa có dữ liệu...</p>
-                          </template>
-                          <template #cell(#)="data">
-                            {{ data.index + 1 }}
-                          </template>
-                        </b-table>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
+                            <template #empty="">
+                              <p>Chưa có dữ liệu...</p>
+                            </template>
+                            <template #cell(#)="data">
+                              {{ data.index + 1 }}
+                            </template>
+                          </b-table>
+                        </b-col>
+                      </b-row>
+                    </b-col>
+                  </b-row>
+                </b-container>
               </div>
             </div>
           </div>
@@ -930,7 +595,6 @@
 </template>
 
 <script>
-import widget from "../components/widget.vue";
 function compare(a, b) {
   if (a.rsi && b.rsi) {
     if (a.rsi > b.rsi) {
@@ -945,11 +609,9 @@ function compare(a, b) {
   }
 }
 export default {
-  components: { widget },
   name: "IndexPage",
   data() {
     return {
-      isOpen: true,
       serverConfig: {
         enablePassword: false,
         sitePassword: "anhbaodeptraivodoi",
@@ -1226,7 +888,7 @@ export default {
           sortByFormatted: true,
         },
         {
-          key: "bb5m",
+          key: "bb51m",
           sortable: true,
           label: "BB 5M",
           sortDirection: "desc",
@@ -1235,6 +897,37 @@ export default {
           },
           sortByFormatted: true,
         },
+        {
+          key: "bb52m",
+          sortable: true,
+          label: "BB 5M",
+          sortDirection: "desc",
+          formatter: (value, key, item) => {
+            return item.currentValue.last_tick.close;
+          },
+          sortByFormatted: true,
+        },
+        {
+          key: "bb53m",
+          sortable: true,
+          label: "BB 5M",
+          sortDirection: "desc",
+          formatter: (value, key, item) => {
+            return item.currentValue.last_tick.close;
+          },
+          sortByFormatted: true,
+        },
+        {
+          key: "bb54m",
+          sortable: true,
+          label: "BB 5M",
+          sortDirection: "desc",
+          formatter: (value, key, item) => {
+            return item.currentValue.last_tick.close;
+          },
+          sortByFormatted: true,
+        },
+
         {
           key: "volume",
           sortable: true,
@@ -1245,35 +938,9 @@ export default {
           },
           sortByFormatted: true,
         },
-      ],
-      fieldsBinanceWatchlist: [
-        {
-          key: "name",
-
-          stickyColumn: true,
-          isRowHeader: true,
-          variant: "primary",
-        },
-
-        {
-          key: "price",
-          label: "Info",
-          formatter: (value, key, item) => {
-            return item.currentValue.last_tick.close;
-          },
-        },
-        {
-          key: "bb15m",
-          label: "BB 15m",
-        },
-        {
-          key: "bb5m",
-          label: "BB 5M",
-        },
         {
           key: "tool",
-
-          label: "tool",
+          label: "→",
         },
       ],
       binanceWatchList: [],
@@ -1285,24 +952,19 @@ export default {
           key: "TT",
         },
       ],
+      fieldsBinanceWatchlist: [
+        { key: "name", label: "Pair" },
+        {
+          key: "BB",
+        },
+        {
+          key: "Windows",
+        },
+        { key: "tool", label: "#" },
+      ],
     };
   },
   computed: {
-    getBinanceWatchList() {
-      //read from cookie
-      let a = JSON.parse(this.$cookies.get("watchList"));
-      //  this.binanceWatchList = JSON.parse(a);
-      let listWatch = [];
-      this.listpair.map((item) => {
-        a.map((item1Cookie) => {
-          if(item1Cookie===item.name){
-            listWatch.push(item)
-          }
-        });
-      });
-      this.binanceWatchList=listWatch
-      return this.binanceWatchList;
-    },
     getPairlist() {
       let newList = [];
       this.listpair.map((item) => {
@@ -1334,33 +996,30 @@ export default {
         }
       });
       this.binanceWatchList = newList;
-      let ListName = [];
-      this.binanceWatchList.map((item) => {
-        ListName.push(item.name);
-      });
-      this.$cookies.set("watchList", JSON.stringify(ListName));
     },
     addToBBWatchList(item) {
       let name = item.name;
+      let newList = this.binanceWatchList;
       if (this.binanceWatchList.length > 0) {
-        if (!this.binanceWatchList.filter((e) => e.name === name).length > 0) {
-          this.binanceWatchList.push(item);
-        } else {
-          this.$bvToast.toast(`Mã token bạn chọn đã nằm trong watchlist`, {
-            title: "Trùng mã",
-            autoHideDelay: 2000,
-            variant: "danger",
-          });
-        }
+        this.binanceWatchList.filter((e) => {
+          if (e.name != name) {
+            console.log("khong trung");
+            newList.push(item);
+          } else {
+            this.$bvToast.toast(`Trùng Mã Trong Watchlist`, {
+              title: "Thông Báo",
+              autoHideDelay: 5000,
+              variant: "warning",
+            });
+            return;
+          }
+        });
       } else {
-        this.binanceWatchList.push(item);
+        newList.push(item);
       }
-      //lưu vào cookie
-      let ListName = [];
-      this.binanceWatchList.map((item) => {
-        ListName.push(item.name);
-      });
-      this.$cookies.set("watchList", JSON.stringify(ListName));
+      if (newList.length > 0) {
+        this.binanceWatchList = newList;
+      }
     },
     formatSoTien(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1368,13 +1027,12 @@ export default {
 
     getData() {
       // this.dataReady = false;
-      let url = "https://baotmrsi.herokuapp.com/rsi";
-      //let url = "http://localhost:3000/rsi";
+      //let url = "https://baotmrsi.herokuapp.com/rsi";
+      let url = "http://localhost:3000/rsi";
       console.log("fetch...");
       fetch(url)
         .then((data) => data.json())
         .then((data) => {
-          // console.log(data);
           this.listpair = data;
           this.dataReady = true;
         });
@@ -1437,16 +1095,5 @@ table .flip-list-move {
   min-width: 120px;
   max-width: 120px;
   padding: 0.8rem !important;
-}
-.linkBinance {
-  color: blue;
-}
-.linkBinance:hover {
-  color: yellow;
-}
-.watchList:hover {
-  color: rgb(0, 255, 60);
-  background: red;
-  cursor: pointer;
 }
 </style>
