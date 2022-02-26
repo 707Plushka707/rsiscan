@@ -189,6 +189,7 @@
       id="mySideBoardRight"
       title="Master Account"
       left
+      backdrop-variant="dark"
       width="700px"
       shadow
     >
@@ -322,7 +323,6 @@
                       head-variant="dark"
                       class="text-center"
                       striped
-                      thead-class="myThClass"
                       fixed
                       hover
                       no-border-collapse
