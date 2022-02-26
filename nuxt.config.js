@@ -32,11 +32,15 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/bootstrap
+
+    '@nuxtjs/onesignal',
+    '@nuxtjs/pwa',
     'bootstrap-vue/nuxt',
   ],
   server: {
@@ -44,5 +48,14 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+  oneSignal: {
+    init: {
+      appId: 'e3e0074e-abff-4ff2-80a7-8e6aaea73bf1',
+      allowLocalhostAsSecureOrigin: true,
+      welcomeNotification: {
+        disable: true
+      }
+    }
   }
 }
