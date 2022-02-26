@@ -57,19 +57,19 @@ export default {
 };
 </script>
 <style scoped>
-html {
-  background-color: black !important;
+html,
+body {
+  background-color: rgb(224, 55, 202) !important;
 }
 .grid-container {
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 10px;
-  background-color: black;
   padding: 10px;
+  background-color: rgb(34, 76, 167) !important;
 }
 
 .grid-container > div {
-  background-color: rgba(12, 12, 12, 0.8);
   text-align: center;
 }
 .frame {
