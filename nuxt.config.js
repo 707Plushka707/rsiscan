@@ -43,6 +43,14 @@ export default {
     '@nuxtjs/pwa',
     'bootstrap-vue/nuxt',
   ],
+  pwa: {
+    manifest: {
+      name: 'RSI Scanner',
+      lang: 'vi',
+      useWebmanifestExtension: false,
+      short_name: 'RSI',
+    }
+  },
   server: {
     port: 3001 // default: 3000
   },
@@ -50,6 +58,9 @@ export default {
   build: {
   },
   oneSignal: {
+
+    cdn: true,
+
     init: {
       appId: 'e3e0074e-abff-4ff2-80a7-8e6aaea73bf1',
       allowLocalhostAsSecureOrigin: true,
