@@ -194,7 +194,7 @@
         :isOpen.sync="isOpen"
         :resizable="true"
         :zGroup="0"
-        style="display:none"
+        style="display: none"
         positionHint="-20 / -100"
       >
         <widget></widget>
@@ -1291,17 +1291,21 @@ export default {
   computed: {
     getBinanceWatchList() {
       //read from cookie
-      let a = JSON.parse(this.$cookies.get("watchList"));
+      let a = this.$cookies.get("watchList");
+      if (!a) {
+        this.$cookies.set("watchList", JSON.stringify([]));
+      }
+       a = JSON.parse(this.$cookies.get("watchList"));
       //  this.binanceWatchList = JSON.parse(a);
       let listWatch = [];
       this.listpair.map((item) => {
         a.map((item1Cookie) => {
-          if(item1Cookie===item.name){
-            listWatch.push(item)
+          if (item1Cookie === item.name) {
+            listWatch.push(item);
           }
         });
       });
-      this.binanceWatchList=listWatch
+      this.binanceWatchList = listWatch;
       return this.binanceWatchList;
     },
     getPairlist() {
