@@ -185,6 +185,32 @@
         </template>
       </b-table>
     </b-sidebar>
+    <b-sidebar
+      id="mySideBoardRight"
+      title="Master Account"
+      left
+      width="700px"
+      shadow
+    >
+      <b-table
+        outlined
+        head-variant="dark"
+        class="text-center"
+        striped
+        hover
+        :items="orderWatchList"
+        :fields="fieldsCopyTradeWatchlist"
+        show-empty
+        :tbody-transition-props="transProps"
+      >
+        <template #empty="">
+          <p>Chưa có dữ liệu...</p>
+        </template>
+        <template #cell(#)="data">
+          {{ data.index + 1 }}
+        </template>
+      </b-table>
+    </b-sidebar>
 
     <header class="navbar">
       <div class="container-xl"></div>
@@ -197,7 +223,11 @@
             <div class="col">
               <!-- Page pre-title -->
               <div class="page-pretitle">RSI Scan</div>
-              <h2 class="page-title">Dashboard</h2>
+              <h2 class="page-title">
+                Dashboard
+
+                <span class="sideBarOrder" v-b-toggle.mySideBoardRight>⍟</span>
+              </h2>
             </div>
             <div>
               <b-avatar
@@ -608,31 +638,6 @@
                         </div>
                       </template>
                     </b-table>
-                  </b-col>
-                  <b-col col lg="3" md="12" sm="12">
-                    <b-row>
-                      <b-col cols="12"> </b-col>
-                      <b-col cols="12">
-                        <b-table
-                          outlined
-                          head-variant="dark"
-                          class="text-center"
-                          striped
-                          hover
-                          :items="orderWatchList"
-                          :fields="fieldsCopyTradeWatchlist"
-                          show-empty
-                          :tbody-transition-props="transProps"
-                        >
-                          <template #empty="">
-                            <p>Chưa có dữ liệu...</p>
-                          </template>
-                          <template #cell(#)="data">
-                            {{ data.index + 1 }}
-                          </template>
-                        </b-table>
-                      </b-col>
-                    </b-row>
                   </b-col>
                 </b-row>
               </div>
@@ -1447,6 +1452,13 @@ table .flip-list-move {
 .watchList:hover {
   color: rgb(0, 255, 60);
   background: red;
+  cursor: pointer;
+}
+.sideBarOrder {
+  color: red;
+}
+.sideBarOrder:hover {
+  color: green;
   cursor: pointer;
 }
 </style>
