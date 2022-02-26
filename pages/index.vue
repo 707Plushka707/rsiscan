@@ -185,21 +185,7 @@
         </template>
       </b-table>
     </b-sidebar>
-    <hsc-window-style-metal style="z-index: 2147483647; position: absolute">
-      <hsc-window
-        title="BTCUSDT"
-        :minWidth="500"
-        :minHeight="500"
-        :closeButton="true"
-        :isOpen.sync="isOpen"
-        :resizable="true"
-        :zGroup="0"
-        style="display: none"
-        positionHint="-20 / -100"
-      >
-        <widget></widget>
-      </hsc-window>
-    </hsc-window-style-metal>
+
     <header class="navbar">
       <div class="container-xl"></div>
     </header>
@@ -225,17 +211,26 @@
                 class="mr-1 watchList"
               ></b-avatar>
             </div>
+            <div class="btn-list">
+              <a
+                href="#"
+                v-b-modal.modalCauHinh
+                class="btn btn-primary d-none d-sm-inline-block"
+              >
+                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                Cấu Hình
+              </a>
+            </div>
             <!-- Page title actions -->
             <div class="col-auto ms-auto d-print-none">
-              <div></div>
               <div class="btn-list">
                 <a
-                  href="#"
-                  v-b-modal.modalCauHinh
-                  class="btn btn-primary d-none d-sm-inline-block"
+                  href="/dual"
+                  target="_blank"
+                  class="btn btn-success d-none d-sm-inline-block"
                 >
                   <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                  Cấu Hình
+                  ⇌
                 </a>
               </div>
             </div>
@@ -1295,7 +1290,7 @@ export default {
       if (!a) {
         this.$cookies.set("watchList", JSON.stringify([]));
       }
-       a = JSON.parse(this.$cookies.get("watchList"));
+      a = JSON.parse(this.$cookies.get("watchList"));
       //  this.binanceWatchList = JSON.parse(a);
       let listWatch = [];
       this.listpair.map((item) => {
