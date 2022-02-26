@@ -194,6 +194,7 @@
         :isOpen.sync="isOpen"
         :resizable="true"
         :zGroup="0"
+        style="display:none"
         positionHint="-20 / -100"
       >
         <widget></widget>
