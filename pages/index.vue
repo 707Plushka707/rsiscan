@@ -199,16 +199,13 @@
         class="text-center"
         striped
         hover
+        :fields="fieldWatchList"
         :items="orderWatchList"
-        :fields="fieldsCopyTradeWatchlist"
         show-empty
         :tbody-transition-props="transProps"
       >
         <template #empty="">
-          <p>Chưa có dữ liệu...</p>
-        </template>
-        <template #cell(#)="data">
-          {{ data.index + 1 }}
+          <b-spinner variant="primary" small label="Spinning"></b-spinner>
         </template>
       </b-table>
     </b-sidebar>
@@ -1100,6 +1097,7 @@ export default {
           "DUSKUSDT",
           "CTSIUSDT",
         ],
+
         rsi15m: 50,
         rsi5m: 20,
         volume: 1,
@@ -1279,11 +1277,25 @@ export default {
       ],
       binanceWatchList: [],
       orderWatchList: [],
-      fieldsCopyTradeWatchlist: [
-        { key: "#" },
-        { key: "name" },
+      fieldWatchList: [
+        { key: "symbol", label: "Cặp" },
         {
-          key: "TT",
+          key: "entryPrice",
+          label: "Giá Vào",
+        },
+        {
+          key: "initialMargin",
+          label: "Vốn",
+          formatter: (value, key, item) => {
+            return parseFloat(value).toFixed(1);
+          },
+        },
+        {
+          key: "unrealizedProfit",
+          label: "Lời",
+          formatter: (value, key, item) => {
+            return parseFloat(value).toFixed(1);
+          },
         },
       ],
     };
@@ -1375,13 +1387,31 @@ export default {
       // this.dataReady = false;
       let url = "https://baotmrsi.herokuapp.com/rsi";
       //let url = "http://localhost:3000/rsi";
-      console.log("fetch...");
+      // console.log("fetch...");
       fetch(url)
         .then((data) => data.json())
         .then((data) => {
           // console.log(data);
           this.listpair = data;
           this.dataReady = true;
+        });
+      //fetch userdata
+      let urlUser = "https://baotmrsi.herokuapp.com/getAccount";
+      fetch(urlUser)
+        .then((data) => data.json())
+        .then((data) => {
+          console.log(data);
+          this.accountOrder = data;
+          this.orderWatchList = data.positions.filter((item) => {
+            if (
+              parseFloat(item.initialMargin) != 0 &&
+              parseFloat(item.maintMargin) != 0
+            ) {
+              return true;
+            } else {
+              return false;
+            }
+          });
         });
     },
   },
