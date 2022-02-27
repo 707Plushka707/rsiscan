@@ -231,6 +231,21 @@
           <template #empty="">
             <b-spinner variant="primary" small label="Spinning"></b-spinner>
           </template>
+          <template #cell(unrealizedProfit)="data">
+            <div>
+              <span class="text-left">{{
+                parseFloat(data.item.unrealizedProfit).toFixed(2)
+              }}</span>
+              <span
+                v-if="
+                  parseFloat((data.item.initialMargin * 10) / 100) <
+                  parseFloat(data.item.unrealizedProfit)
+                "
+                class="vebo text-right"
+                >⊛</span
+              >
+            </div>
+          </template>
         </b-table>
         <div class="col-auto ms-auto d-print-none">
           <div class="btn-list">
@@ -1423,7 +1438,7 @@ export default {
       // this.dataReady = false;
       let url = "https://baotmrsi.herokuapp.com/rsi";
       //let url = "http://localhost:3000/rsi";
-       console.log("fetch...");
+      console.log("fetch...");
       fetch(url)
         .then((data) => data.json())
         .then((data) => {
@@ -1437,7 +1452,7 @@ export default {
         .then((data) => data.json())
         .then((data) => {
           this.accountOrder = data;
-        
+
           this.orderWatchList = data.positions.filter((item) => {
             if (
               parseFloat(item.initialMargin) != 0 &&
@@ -1532,5 +1547,17 @@ table .flip-list-move {
 .sideBarOrder:hover {
   color: green;
   cursor: pointer;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.vebo {
+  animation: blinker 1s linear infinite;
+  color: rgb(255, 4, 129);
+  font-weight: 900;
+  text-align: right;
 }
 </style>
