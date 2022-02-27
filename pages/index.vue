@@ -193,33 +193,58 @@
       width="700px"
       shadow
     >
-      <b-table
-        outlined
-        head-variant="dark"
-        class="text-center"
-        striped
-        hover
-        :fields="fieldWatchList"
-        :items="orderWatchList"
-        show-empty
-        :tbody-transition-props="transProps"
-      >
-        <template #empty="">
-          <b-spinner variant="primary" small label="Spinning"></b-spinner>
-        </template>
-      </b-table>
-      <div class="col-auto ms-auto d-print-none">
-        <div class="btn-list">
-          <a
-            href="/dualOrder"
-            target="_blank"
-            class="btn btn-success d-none d-sm-inline-block"
-          >
-            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-            ⇌
-          </a>
+      <b-container>
+        <p v-if="accountOrder">
+          * Tổng Ví :
+          <code
+            >{{ parseFloat(accountOrder.totalWalletBalance).toFixed(1) }}
+          </code>
+          - Đang còn :
+          <code
+            >{{ parseFloat(accountOrder.availableBalance).toFixed(1) }}
+          </code>
+          <br />
+          * Đang đánh :
+          <code
+            >{{ parseFloat(accountOrder.totalInitialMargin).toFixed(1) }}
+          </code>
+          - Lợi nhuận:
+          <code
+            >{{ parseFloat(accountOrder.totalUnrealizedProfit).toFixed(1) }}
+          </code>
+          <br />
+          * Lệnh Đang Chờ :
+          <code>{{ orderWatchList.length }} </code>
+        </p>
+
+        <b-table
+          outlined
+          head-variant="dark"
+          class="text-center"
+          striped
+          hover
+          :fields="fieldWatchList"
+          :items="orderWatchList"
+          show-empty
+          :tbody-transition-props="transProps"
+        >
+          <template #empty="">
+            <b-spinner variant="primary" small label="Spinning"></b-spinner>
+          </template>
+        </b-table>
+        <div class="col-auto ms-auto d-print-none">
+          <div class="btn-list">
+            <a
+              href="/dualOrder"
+              target="_blank"
+              class="btn btn-success d-none d-sm-inline-block"
+            >
+              <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+              ⇌
+            </a>
+          </div>
         </div>
-      </div>
+      </b-container>
     </b-sidebar>
 
     <header class="navbar">
@@ -940,7 +965,6 @@
 </template>
 
 <script>
-import widget from "../components/widget.vue";
 function compare(a, b) {
   if (a.rsi && b.rsi) {
     if (a.rsi > b.rsi) {
@@ -955,7 +979,6 @@ function compare(a, b) {
   }
 }
 export default {
-  components: { widget },
   name: "IndexPage",
   data() {
     return {
@@ -1414,6 +1437,7 @@ export default {
         .then((data) => data.json())
         .then((data) => {
           this.accountOrder = data;
+          console.log(data);
           this.orderWatchList = data.positions.filter((item) => {
             if (
               parseFloat(item.initialMargin) != 0 &&
@@ -1424,11 +1448,12 @@ export default {
               return false;
             }
           });
+          console.log(this.accountOrder);
           let accountOrder = [];
           this.orderWatchList.map((item) => {
             accountOrder.push(item.symbol);
           });
-          console.log(accountOrder);
+
           this.$cookies.set("watchListAccount", JSON.stringify(accountOrder));
         });
     },
