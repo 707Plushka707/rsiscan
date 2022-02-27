@@ -215,6 +215,7 @@
           <br />
           * Lệnh Đang Chờ :
           <code>{{ orderWatchList.length }} </code>
+          <a href="#">Thống Kê ngày...</a>
         </p>
 
         <b-table
@@ -248,21 +249,17 @@
                 "
                 >{{ parseFloat(data.item.unrealizedProfit).toFixed(2) }}</span
               >
-              <span
-                v-if="
-                  parseFloat((data.item.initialMargin * 10) / 100) <
-                  parseFloat(data.item.unrealizedProfit)
-                "
-                class="text-mute"
-              >
-                <sub>{{
-                  (
-                    ((data.item.initialMargin * 10) /
-                      100 /
-                      data.item.unrealizedProfit) *
-                    10
-                  ).toFixed(1)
-                }}%</sub>
+              <span class="text-mute">
+                <sub
+                  >{{
+                    (
+                      ((data.item.initialMargin * 10) /
+                        100 /
+                        data.item.unrealizedProfit) *
+                      10
+                    ).toFixed(1)
+                  }}%</sub
+                >
               </span>
             </div>
           </template>
