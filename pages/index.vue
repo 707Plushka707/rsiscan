@@ -1423,7 +1423,7 @@ export default {
       // this.dataReady = false;
       let url = "https://baotmrsi.herokuapp.com/rsi";
       //let url = "http://localhost:3000/rsi";
-      // console.log("fetch...");
+       console.log("fetch...");
       fetch(url)
         .then((data) => data.json())
         .then((data) => {
@@ -1437,7 +1437,7 @@ export default {
         .then((data) => data.json())
         .then((data) => {
           this.accountOrder = data;
-          console.log(data);
+        
           this.orderWatchList = data.positions.filter((item) => {
             if (
               parseFloat(item.initialMargin) != 0 &&
@@ -1448,7 +1448,6 @@ export default {
               return false;
             }
           });
-          console.log(this.accountOrder);
           let accountOrder = [];
           this.orderWatchList.map((item) => {
             accountOrder.push(item.symbol);
