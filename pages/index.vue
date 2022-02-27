@@ -231,6 +231,12 @@
           <template #empty="">
             <b-spinner variant="primary" small label="Spinning"></b-spinner>
           </template>
+          <template #cell(symbol)="data">
+            <span class="linkBinance" @click="calculatorValue(data.item)"
+              >♣</span
+            >
+            <span class="namePairList"> {{ data.item.symbol }}</span>
+          </template>
           <template #cell(unrealizedProfit)="data">
             <div>
               <span class="text-left">{{
@@ -258,6 +264,9 @@
               ⇌
             </a>
           </div>
+        </div>
+        <div v-if="calculatorValueStatus">
+          Đây vùng tính toán cho cặp<b> {{ calculatorItem.symbol }}</b>
         </div>
       </b-container>
     </b-sidebar>
@@ -998,6 +1007,7 @@ export default {
   data() {
     return {
       isOpen: true,
+      accountOrder: [],
       serverConfig: {
         enablePassword: false,
         sitePassword: "anhbaodeptraivodoi",
@@ -1212,7 +1222,8 @@ export default {
         name: "flip-list",
       },
       filterName: null,
-
+      calculatorValueStatus: false,
+      calculatorItem: null,
       items: [],
       listpair: [],
       dataReady: false,
@@ -1332,6 +1343,16 @@ export default {
         {
           key: "entryPrice",
           label: "Giá Vào",
+          formatter: (value, key, item) => {
+            return parseFloat(value.toString()).toFixed(4);
+          },
+        },
+        {
+          key: "price_current",
+          label: "Giá Hiện tại",
+          formatter: (value, key, item) => {
+            return parseFloat(value.toString());
+          },
         },
         {
           key: "initialMargin",
@@ -1342,7 +1363,7 @@ export default {
         },
         {
           key: "unrealizedProfit",
-          label: "Lời",
+          label: "KQ",
           formatter: (value, key, item) => {
             return parseFloat(value).toFixed(1);
           },
@@ -1433,7 +1454,10 @@ export default {
     formatSoTien(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-
+    calculatorValue(item) {
+      this.calculatorValueStatus = true;
+      this.calculatorItem = item;
+    },
     getData() {
       // this.dataReady = false;
       let url = "https://baotmrsi.herokuapp.com/rsi";
@@ -1444,32 +1468,48 @@ export default {
         .then((data) => {
           // console.log(data);
           this.listpair = data;
+          let urlUser = "https://baotmrsi.herokuapp.com/getAccount";
+
+          fetch(urlUser)
+            .then((data) => data.json())
+            .then((data) => {
+              this.accountOrder = data;
+              let listOrder = data.positions.filter((item) => {
+                if (
+                  parseFloat(item.initialMargin) != 0 &&
+                  parseFloat(item.maintMargin) != 0
+                ) {
+                  return true;
+                } else {
+                  return false;
+                }
+              });
+              let _listOrder = [];
+              this.listpair.map((item) => {
+                listOrder.map((item1) => {
+                  // console.log(item.currentValue.last_tick);
+                  if (item.currentValue.name === item1.symbol) {
+                    _listOrder.push({
+                      ...item1,
+                      price_current: item.currentValue.last_tick.close,
+                    });
+                  }
+                });
+              });
+              this.orderWatchList = _listOrder;
+              let listDualOrder = [];
+              this.orderWatchList.map((item) => {
+                listDualOrder.push(item.symbol);
+              });
+              this.$cookies.set(
+                "watchListAccount",
+                JSON.stringify(listDualOrder)
+              );
+            });
+
           this.dataReady = true;
         });
       //fetch userdata
-      let urlUser = "https://baotmrsi.herokuapp.com/getAccount";
-      fetch(urlUser)
-        .then((data) => data.json())
-        .then((data) => {
-          this.accountOrder = data;
-
-          this.orderWatchList = data.positions.filter((item) => {
-            if (
-              parseFloat(item.initialMargin) != 0 &&
-              parseFloat(item.maintMargin) != 0
-            ) {
-              return true;
-            } else {
-              return false;
-            }
-          });
-          let accountOrder = [];
-          this.orderWatchList.map((item) => {
-            accountOrder.push(item.symbol);
-          });
-
-          this.$cookies.set("watchListAccount", JSON.stringify(accountOrder));
-        });
     },
   },
 };
@@ -1535,6 +1575,7 @@ table .flip-list-move {
 }
 .linkBinance:hover {
   color: yellow;
+  cursor: pointer;
 }
 .watchList:hover {
   color: rgb(0, 255, 60);
