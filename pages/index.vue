@@ -239,17 +239,31 @@
           </template>
           <template #cell(unrealizedProfit)="data">
             <div>
-              <span class="text-left">{{
-                parseFloat(data.item.unrealizedProfit).toFixed(2)
-              }}</span>
+              <span
+                :class="
+                  parseFloat((data.item.initialMargin * 10) / 100) <
+                  parseFloat(data.item.unrealizedProfit)
+                    ? 'vebo'
+                    : ''
+                "
+                >{{ parseFloat(data.item.unrealizedProfit).toFixed(2) }}</span
+              >
               <span
                 v-if="
                   parseFloat((data.item.initialMargin * 10) / 100) <
                   parseFloat(data.item.unrealizedProfit)
                 "
-                class="vebo text-right"
-                >⊛</span
+                class="text-mute"
               >
+                <sub>{{
+                  (
+                    ((data.item.initialMargin * 10) /
+                      100 /
+                      data.item.unrealizedProfit) *
+                    10
+                  ).toFixed(1)
+                }}%</sub>
+              </span>
             </div>
           </template>
         </b-table>
@@ -1597,8 +1611,8 @@ table .flip-list-move {
 }
 .vebo {
   animation: blinker 1s linear infinite;
-  color: rgb(255, 4, 129);
-  font-weight: 900;
+  color: white;
   text-align: right;
+  background-color: green;
 }
 </style>
