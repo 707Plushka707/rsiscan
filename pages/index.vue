@@ -1366,7 +1366,7 @@ export default {
           },
         },
         {
-          key: "initialMargin",
+          key: "positionInitialMargin",
           label: "Vốn",
           formatter: (value, key, item) => {
             return parseFloat(value).toFixed(1);
@@ -1480,7 +1480,6 @@ export default {
           // console.log(data);
           this.listpair = data;
           let urlUser = "https://baotmrsi.herokuapp.com/getAccount";
-
           fetch(urlUser)
             .then((data) => data.json())
             .then((data) => {
