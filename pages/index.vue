@@ -1544,7 +1544,7 @@ export default {
     this.getData();
     setInterval(() => {
       this.getData();
-    },2000); //chay moi 5p 1 lan
+    },5000); //chay moi 5p 1 lan
   },
   methods: {
     removeBBWatchList(item) {
