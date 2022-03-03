@@ -277,7 +277,130 @@
           </div>
         </div>
         <div v-if="calculatorValueStatus">
-          Đây vùng tính toán cho cặp<b> {{ calculatorItem.symbol }}</b>
+          <b-table-simple hover small caption-top responsive>
+            <caption>
+              Check Theo mô hình các mẫu nến đảo chiều, Có Hoặc Không Cho Cặp
+              <code>LUNAUSDT</code>
+            </caption>
+
+            <b-thead head-variant="dark" class="text-center">
+              <b-tr>
+                <b-th>Mẫu Nến</b-th>
+                <b-th>5m</b-th>
+                <b-th>15m</b-th>
+                <b-th>30m</b-th>
+                <b-th>1H</b-th>
+                <b-th>4H</b-th>
+                <b-th>1D</b-th>
+                <b-th>1W</b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody class="text-center">
+              <b-tr>
+                <b-th>Abandoned Baby</b-th>
+                <b-td>x</b-td>
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>DragonFly Doji</b-th>
+
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Bullish Hammer</b-th>
+
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Bearish Hammer</b-th>
+
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+                <b-td>✓</b-td>
+
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+                <b-td>x</b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+          <b-table-simple hover small caption-top responsive>
+            <caption>
+              Check Theo mô hình các mẫu nến đảo chiều, Có Hoặc Không Cho Cặp
+              <code>LUNAUSDT</code>
+            </caption>
+
+            <b-thead head-variant="dark" class="text-center">
+              <b-tr>
+                <b-th>Indicator</b-th>
+                <b-th>5m</b-th>
+                <b-th>15m</b-th>
+                <b-th>30m</b-th>
+                <b-th>1H</b-th>
+                <b-th>4H</b-th>
+                <b-th>1D</b-th>
+                <b-th>1W</b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody class="text-center">
+              <b-tr>
+                <b-th>Accumulation Distribution Line (ADL)</b-th>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td> <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Simple Moving Average (SMA).</b-th>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td> <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Exponential Moving Average (EMA)</b-th>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td> <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Moneyflow Index (MFI)</b-th>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td> <b-td>...</b-td>
+                <b-td>...</b-td>
+                <b-td>...</b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
         </div>
       </b-container>
     </b-sidebar>
@@ -1421,7 +1544,7 @@ export default {
     this.getData();
     setInterval(() => {
       this.getData();
-    }, 5000); //chay moi 5p 1 lan
+    }, 2000); //chay moi 5p 1 lan
   },
   methods: {
     removeBBWatchList(item) {
