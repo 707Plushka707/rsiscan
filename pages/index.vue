@@ -282,73 +282,29 @@
           </div>
         </div>
         <div v-if="calculatorValueStatus">
-          <b-table-simple hover small caption-top responsive>
-            <caption>
-              Check Theo mô hình các mẫu nến đảo chiều, Có Hoặc Không Cho Cặp
-              <code>LUNAUSDT</code>
-            </caption>
-
-            <b-thead head-variant="dark" class="text-center">
-              <b-tr>
-                <b-th>Mẫu Nến</b-th>
-                <b-th>5m</b-th>
-                <b-th>15m</b-th>
-                <b-th>30m</b-th>
-                <b-th>1H</b-th>
-                <b-th>4H</b-th>
-                <b-th>1D</b-th>
-                <b-th>1W</b-th>
-              </b-tr>
-            </b-thead>
-            <b-tbody class="text-center">
-              <b-tr>
-                <b-th>Abandoned Baby</b-th>
-                <b-td>x</b-td>
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>DragonFly Doji</b-th>
-
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Bullish Hammer</b-th>
-
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Bearish Hammer</b-th>
-
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-                <b-td>✓</b-td>
-
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-                <b-td>x</b-td>
-              </b-tr>
-            </b-tbody>
-          </b-table-simple>
+          <div v-if="calculatorValueStatusCheck">
+            <b-table
+              :items="calculatorItem"
+              outlined
+              style="font-size: 13px"
+              head-variant="dark"
+              class="text-center mt-3"
+              striped
+              hover
+              responsive
+              caption-top
+              :caption="
+                'Check mô hình nến đảo chiều cho cặp ' + calculatorSymbol
+              "
+            >
+              <template #cell(name)="data">
+                <strong>{{ data.item.name }}</strong>
+              </template>
+            </b-table>
+          </div>
+          <div v-else class="text-center">
+           <b-spinner variant="primary" label="Spinning"></b-spinner>
+          </div>
         </div>
       </b-container>
     </b-sidebar>
@@ -1089,6 +1045,7 @@ export default {
   data() {
     return {
       isOpen: true,
+      calculatorValueStatusCheck: false,
       accountOrder: [],
       serverConfig: {
         enablePassword: false,
@@ -1304,6 +1261,7 @@ export default {
         name: "flip-list",
       },
       filterName: null,
+      calculatorSymbol: null,
       calculatorValueStatus: false,
       calculatorItem: null,
       items: [],
@@ -1537,12 +1495,35 @@ export default {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     calculatorValue(item) {
+      this.calculatorSymbol = item.symbol;
+      this.calculatorValueStatusCheck = false;
+      this.calculatorValueStatus = true;
       fetch("https://baotmrsi.herokuapp.com/analyze?symbol=" + item.symbol)
         .then((data) => data.json())
         .then((data) => {
           console.log(data);
+          let resultArray = [];
+          let allKey;
+          data.map((item) => {
+            allKey = Object.keys(item);
+          });
+
+          allKey.map((item) => {
+            let name = item; //abandonedbay
+            let myObject = {};
+            data.map((item1) => {
+              myObject.name = name;
+              myObject[item1.time] = item1[name];
+            });
+            resultArray.push(myObject);
+          });
+          resultArray = resultArray.filter((item) => {
+            return item.name != "time";
+          });
+
           this.calculatorValueStatus = true;
-          this.calculatorItem = data;
+          this.calculatorItem = resultArray;
+          this.calculatorValueStatusCheck = true;
         });
     },
     getData() {
