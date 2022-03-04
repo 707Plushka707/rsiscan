@@ -286,7 +286,6 @@
             <b-table
               :items="calculatorItem"
               outlined
-              style="font-size: 13px"
               head-variant="dark"
               class="text-center mt-3"
               striped
@@ -300,10 +299,50 @@
               <template #cell(name)="data">
                 <strong>{{ data.item.name }}</strong>
               </template>
+              <template #cell(1m)="data">
+                <span :class="data.item['1m'] ? 'yes_c' : 'no_c'">{{
+                  data.item["1m"] ? "✓" : "x"
+                }}</span>
+              </template>
+              <template #cell(5m)="data">
+                <span :class="data.item['5m'] ? 'yes_c' : 'no_c'">{{
+                  data.item["5m"] ? "✓" : "x"
+                }}</span>
+              </template>
+              <template #cell(15m)="data">
+                <span :class="data.item['15m'] ? 'yes_c' : 'no_c'">{{
+                  data.item["15m"] ? "✓" : "x"
+                }}</span>
+              </template>
+              <template #cell(30m)="data">
+                <span :class="data.item['30m'] ? 'yes_c' : 'no_c'">{{
+                  data.item["30m"] ? "✓" : "x"
+                }}</span>
+              </template>
+              <template #cell(4h)="data">
+                <span :class="data.item['4h'] ? 'yes_c' : 'no_c'">{{
+                  data.item["4h"] ? "✓" : "x"
+                }}</span>
+              </template>
+              <template #cell(1h)="data">
+                <span :class="data.item['1h'] ? 'yes_c' : 'no_c'">{{
+                  data.item["1h"] ? "✓" : "x"
+                }}</span>
+              </template>
+              <template #cell(1d)="data">
+                <span :class="data.item['1d'] ? 'yes_c' : 'no_c'">{{
+                  data.item["1d"] ? "✓" : "x"
+                }}</span>
+              </template>
+              <template #cell(1w)="data">
+                <span :class="data.item['1w'] ? 'yes_c' : 'no_c'">{{
+                  data.item["1w"] ? "✓" : "x"
+                }}</span>
+              </template>
             </b-table>
           </div>
           <div v-else class="text-center">
-           <b-spinner variant="primary" label="Spinning"></b-spinner>
+            <b-spinner variant="primary" label="Spinning"></b-spinner>
           </div>
         </div>
       </b-container>
@@ -1667,5 +1706,21 @@ table .flip-list-move {
   color: white;
   text-align: right;
   background-color: green;
+}
+.no_c {
+  color: white;
+  background-color: red;
+  padding: 2px;
+}
+.yes_c {
+  animation: blinker 1s linear infinite;
+  color: white;
+  padding: 2px;
+  background-color: green;
+}
+.no_c:hover,
+.yes_c:hover {
+  cursor: pointer;
+  background-color: rgb(16, 214, 181);
 }
 </style>
