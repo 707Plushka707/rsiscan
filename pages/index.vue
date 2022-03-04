@@ -251,12 +251,17 @@
               >
               <span class="text-mute">
                 <sub
+                  :style="
+                    (data.item.unrealizedProfit / data.item.initialMargin) *
+                      100 <
+                    -50
+                      ? 'color:white;background-color:red'
+                      : 'color:white;background-color:green;'
+                  "
                   >{{
                     (
-                      ((data.item.initialMargin * 10) /
-                        100 /
-                        data.item.unrealizedProfit) *
-                      10
+                      (data.item.unrealizedProfit / data.item.initialMargin) *
+                      100
                     ).toFixed(1)
                   }}%</sub
                 >
@@ -341,63 +346,6 @@
                 <b-td>x</b-td>
                 <b-td>x</b-td>
                 <b-td>x</b-td>
-              </b-tr>
-            </b-tbody>
-          </b-table-simple>
-          <b-table-simple hover small caption-top responsive>
-            <caption>
-              Check Theo mô hình các mẫu nến đảo chiều, Có Hoặc Không Cho Cặp
-              <code>LUNAUSDT</code>
-            </caption>
-
-            <b-thead head-variant="dark" class="text-center">
-              <b-tr>
-                <b-th>Indicator</b-th>
-                <b-th>5m</b-th>
-                <b-th>15m</b-th>
-                <b-th>30m</b-th>
-                <b-th>1H</b-th>
-                <b-th>4H</b-th>
-                <b-th>1D</b-th>
-                <b-th>1W</b-th>
-              </b-tr>
-            </b-thead>
-            <b-tbody class="text-center">
-              <b-tr>
-                <b-th>Accumulation Distribution Line (ADL)</b-th>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td> <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Simple Moving Average (SMA).</b-th>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td> <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Exponential Moving Average (EMA)</b-th>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td> <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Moneyflow Index (MFI)</b-th>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td> <b-td>...</b-td>
-                <b-td>...</b-td>
-                <b-td>...</b-td>
               </b-tr>
             </b-tbody>
           </b-table-simple>
@@ -1544,7 +1492,7 @@ export default {
     this.getData();
     setInterval(() => {
       this.getData();
-    },5000); //chay moi 5p 1 lan
+    }, 5000); //chay moi 5p 1 lan
   },
   methods: {
     removeBBWatchList(item) {
@@ -1589,8 +1537,13 @@ export default {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     calculatorValue(item) {
-      this.calculatorValueStatus = true;
-      this.calculatorItem = item;
+      fetch("https://baotmrsi.herokuapp.com/analyze?symbol=" + item.symbol)
+        .then((data) => data.json())
+        .then((data) => {
+          console.log(data);
+          this.calculatorValueStatus = true;
+          this.calculatorItem = data;
+        });
     },
     getData() {
       // this.dataReady = false;
