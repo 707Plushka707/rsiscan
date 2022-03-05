@@ -796,8 +796,10 @@
         class="text-center"
         responsive
         caption-top
+        foot-row-variant="danger"
+        foot-clone
         show-empty
-        :items="thongkeacc"
+        :items="getAccountThongKe"
         small
         hover
       >
@@ -807,6 +809,7 @@
         <template #cell(time)="data">
           <strong>{{ $moment(data.item.time).format("DD/MM") }}</strong>
         </template>
+        
       </b-table>
     </b-modal>
     <b-modal
@@ -1479,6 +1482,11 @@ export default {
     };
   },
   computed: {
+    getSumProfit() {
+      return this.visibleRows.reduce((accum, item) => {
+        return accum + item.a;
+      }, 0.0);
+    },
     getBinanceWatchList() {
       //read from cookie
       let a = this.$cookies.get("watchList");
@@ -1497,6 +1505,20 @@ export default {
       });
       this.binanceWatchList = listWatch;
       return this.binanceWatchList;
+    },
+    getAccountThongKe() {
+      let thongke = [];
+      this.thongkeacc.map((item) => {
+        let today = this.$moment();
+        let tranTime = this.$moment(item.time);
+        if (
+          item.incomeType === "REALIZED_PNL" &&
+          today.isSame(tranTime, "day")
+        ) {
+          thongke.push(item);
+        }
+      });
+      return thongke;
     },
     getPairlist() {
       let newList = [];
@@ -1525,7 +1547,6 @@ export default {
       fetch(url)
         .then((data) => data.json())
         .then((data) => {
-          console.log(data);
           this.thongkeacc = data;
         });
     },

@@ -33,6 +33,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     '@nuxtjs/pwa',
+    '@nuxtjs/moment'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -41,8 +42,7 @@ export default {
 
     '@nuxtjs/onesignal',
     '@nuxtjs/pwa',
-    'bootstrap-vue/nuxt',
-    '@nuxtjs/moment',
+    'bootstrap-vue/nuxt'
   ],
   pwa: {
     manifest: {
