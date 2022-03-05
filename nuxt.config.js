@@ -42,6 +42,7 @@ export default {
     '@nuxtjs/onesignal',
     '@nuxtjs/pwa',
     'bootstrap-vue/nuxt',
+    '@nuxtjs/moment',
   ],
   pwa: {
     manifest: {

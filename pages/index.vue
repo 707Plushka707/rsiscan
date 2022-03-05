@@ -215,7 +215,9 @@
           <br />
           * Lệnh Đang Chờ :
           <code>{{ orderWatchList.length }} </code>
-          <a href="#">Thống Kê ngày...</a>
+          <a v-b-modal.thongkeacc @click="getThongKeAcc()" href="#"
+            >Thống Kê ngày...</a
+          >
         </p>
 
         <b-table
@@ -785,6 +787,31 @@
     <b-modal
       size="xl"
       no-close-on-backdrop
+      id="thongkeacc"
+      title="Thống Kê Acc"
+    >
+      <b-table
+        outlined
+        head-variant="dark"
+        class="text-center"
+        responsive
+        caption-top
+        show-empty
+        :items="thongkeacc"
+        small
+        hover
+      >
+        <template #cell(incomeType)="data">
+          <b-badge variant="warning">{{ data.item.incomeType }}</b-badge>
+        </template>
+        <template #cell(time)="data">
+          <strong>{{ $moment(data.item.time).format("DD/MM") }}</strong>
+        </template>
+      </b-table>
+    </b-modal>
+    <b-modal
+      size="xl"
+      no-close-on-backdrop
       id="modalCauHinh"
       title="Cấu Hình Server"
     >
@@ -1083,6 +1110,7 @@ export default {
   name: "IndexPage",
   data() {
     return {
+      thongkeacc: [],
       isOpen: true,
       calculatorValueStatusCheck: false,
       accountOrder: [],
@@ -1492,6 +1520,15 @@ export default {
     }, 5000); //chay moi 5p 1 lan
   },
   methods: {
+    getThongKeAcc() {
+      let url = "https://baotmrsi.herokuapp.com/getthongke";
+      fetch(url)
+        .then((data) => data.json())
+        .then((data) => {
+          console.log(data);
+          this.thongkeacc = data;
+        });
+    },
     removeBBWatchList(item) {
       let name = item.name;
       let newList = [];
