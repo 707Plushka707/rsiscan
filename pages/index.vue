@@ -803,13 +803,15 @@
         small
         hover
       >
+        <template v-slot:foot(income)>
+          Tổng : {{ getSumProfit }} $
+        </template>
         <template #cell(incomeType)="data">
           <b-badge variant="warning">{{ data.item.incomeType }}</b-badge>
         </template>
         <template #cell(time)="data">
-          <strong>{{ $moment(data.item.time).format("DD/MM") }}</strong>
+          <strong>{{ $moment(data.item.time).format("hh:mm DD/MM") }}</strong>
         </template>
-        
       </b-table>
     </b-modal>
     <b-modal
@@ -1483,9 +1485,11 @@ export default {
   },
   computed: {
     getSumProfit() {
-      return this.visibleRows.reduce((accum, item) => {
-        return accum + item.a;
-      }, 0.0);
+      let count = 0;
+      this.getAccountThongKe.map((item) => {
+        count += parseFloat(item.income);
+      });
+      return count.toFixed(0);
     },
     getBinanceWatchList() {
       //read from cookie
