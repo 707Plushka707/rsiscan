@@ -791,6 +791,7 @@
       no-close-on-backdrop
       id="thongkeacc"
       title="Thống Kê Acc"
+      ok-only
     >
       <div v-if="dataThongKe">
         <b-table
