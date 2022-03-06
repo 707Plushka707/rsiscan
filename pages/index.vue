@@ -235,9 +235,10 @@
             <b-spinner variant="primary" small label="Spinning"></b-spinner>
           </template>
           <template #cell(symbol)="data">
-            <span class="linkBinance" @click="calculatorValue(data.item)"
-              >♣</span
-            >
+            <span
+              class="linkBinance"
+              @click="calculatorValue(data.item)"
+            ></span>
             <span class="namePairList"> {{ data.item.symbol }}</span>
           </template>
           <template #cell(unrealizedProfit)="data">
@@ -486,6 +487,7 @@
                             >☆</span
                           >
                           {{ data.item.name }}
+
                           <span class="linkBinance">
                             <a
                               :href="
@@ -790,29 +792,32 @@
       id="thongkeacc"
       title="Thống Kê Acc"
     >
-      <b-table
-        outlined
-        head-variant="dark"
-        class="text-center"
-        responsive
-        caption-top
-        foot-row-variant="danger"
-        foot-clone
-        show-empty
-        :items="getAccountThongKe"
-        small
-        hover
-      >
-        <template v-slot:foot(income)>
-          Tổng : {{ getSumProfit }} $
-        </template>
-        <template #cell(incomeType)="data">
-          <b-badge variant="warning">{{ data.item.incomeType }}</b-badge>
-        </template>
-        <template #cell(time)="data">
-          <strong>{{ $moment(data.item.time).format("hh:mm DD/MM") }}</strong>
-        </template>
-      </b-table>
+      <div v-if="dataThongKe">
+        <b-table
+          outlined
+          head-variant="dark"
+          class="text-center"
+          responsive
+          caption-top
+          foot-row-variant="danger"
+          foot-clone
+          show-empty
+          :items="getAccountThongKe"
+          small
+          hover
+        >
+          <template v-slot:foot(income)> Tổng : {{ getSumProfit }} $ </template>
+          <template #cell(incomeType)="data">
+            <b-badge variant="warning">{{ data.item.incomeType }}</b-badge>
+          </template>
+          <template #cell(time)="data">
+            <strong>{{ $moment(data.item.time).format("hh:mm DD/MM") }}</strong>
+          </template>
+        </b-table>
+      </div>
+      <div v-else>
+        <h3>Chờ tí...</h3>
+      </div>
     </b-modal>
     <b-modal
       size="xl"
@@ -1115,6 +1120,7 @@ export default {
   name: "IndexPage",
   data() {
     return {
+      dataThongKe: false,
       thongkeacc: [],
       isOpen: true,
       calculatorValueStatusCheck: false,
@@ -1517,7 +1523,7 @@ export default {
         let tranTime = this.$moment(item.time);
         if (
           item.incomeType === "REALIZED_PNL" &&
-          today.isSame(tranTime, "day")
+          today.isSame(tranTime, "month")
         ) {
           thongke.push(item);
         }
@@ -1547,11 +1553,13 @@ export default {
   },
   methods: {
     getThongKeAcc() {
+      this.dataThongKe = false;
       let url = "https://baotmrsi.herokuapp.com/getthongke";
       fetch(url)
         .then((data) => data.json())
         .then((data) => {
           this.thongkeacc = data;
+          this.dataThongKe = true;
         });
     },
     removeBBWatchList(item) {
@@ -1595,6 +1603,7 @@ export default {
     formatSoTien(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    calculatorValueWithName(name) {},
     calculatorValue(item) {
       this.calculatorSymbol = item.symbol;
       this.calculatorValueStatusCheck = false;
